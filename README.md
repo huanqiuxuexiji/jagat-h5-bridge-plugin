@@ -33,6 +33,21 @@
 5. token 不得打印到控制台或上报到日志
 6. 埋点属性保持扁平结构
 
+## 使用安装
+
+把插件挂到个人市场，即可在本机所有仓库中使用：
+
+```bash
+# 登记远程市场
+codex plugin marketplace add <owner>/<repo>
+
+# 查看可用插件
+codex plugin list
+
+# 安装
+codex plugin install jagat-h5-bridge
+```
+
 ## 本地安装（开发者自测）
 
 把插件挂到个人市场，即可在本机所有仓库中使用：
