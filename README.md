@@ -2,13 +2,12 @@
 
 面向接入 Jagat App 内嵌 WebView 的 H5 开发者的 Codex 插件。它把 `window.jagat` 桥接库的完整使用规范封装成一个技能，让 Codex 在编写、修改或排查 `jagat.xxx()` 调用代码时，能直接按正确的方式产出代码，而不是靠猜。
 
-
 ## 技能覆盖范围
 
 技能详解桥接库的 17 个方法，并归纳为四类：
 
 - **环境判断**：`isAndroid()`、`isIos()`、`inApp()`、`getEnv()`、`isChinaApp()`
-- **用户与身份**：`getLocale()`、`getAccessToken()`、`getUser()`
+- **用户与身份**：`getLocale()`、`getUser()`
 - **App 交互**：`share()`、`enableShare()`、`setTitle()`、`track()`、`exit()`
 - **页面跳转**：`openWebPageInApp()`、`openJagatApp()`、`openWebPageInBrowser()`、`openVipOrderPageInApp()`
 
@@ -20,8 +19,7 @@
 2. 严格区分同步方法与 7 个返回 Promise 的异步方法，异步调用统一包 `try/catch`
 3. 分享类操作必须由用户手势直接触发
 4. 对 `null` 返回值做兜底处理
-5. token 不得打印到控制台或上报到日志
-6. 埋点属性保持扁平结构
+5. 埋点属性保持扁平结构
 
 ## 使用安装
 

@@ -35,17 +35,17 @@
 
 打开 `plugins/jagat-h5-bridge/.codex-plugin/plugin.json`，把全部 `[TODO: ...]` 替换掉：
 
-| 字段 | 填什么 |
-| :--- | :--- |
-| `author.name` | 发布方或团队名称 |
-| `author.email` | 可联系到你的邮箱 |
-| `author.url` | 发布方主页或仓库地址 |
-| `homepage` | 插件文档地址 |
-| `repository` | 本仓库的公开地址 |
-| `interface.developerName` | 对外展示的发布方名称 |
-| `interface.websiteURL` | 官网地址 |
-| `interface.privacyPolicyURL` | 隐私政策地址 |
-| `interface.termsOfServiceURL` | 服务条款地址 |
+| 字段                          | 填什么               |
+| :---------------------------- | :------------------- |
+| `author.name`                 | 发布方或团队名称     |
+| `author.email`                | 可联系到你的邮箱     |
+| `author.url`                  | 发布方主页或仓库地址 |
+| `homepage`                    | 插件文档地址         |
+| `repository`                  | 本仓库的公开地址     |
+| `interface.developerName`     | 对外展示的发布方名称 |
+| `interface.websiteURL`        | 官网地址             |
+| `interface.privacyPolicyURL`  | 隐私政策地址         |
+| `interface.termsOfServiceURL` | 服务条款地址         |
 
 `websiteURL`、`privacyPolicyURL`、`termsOfServiceURL` 必须是合法的 HTTPS 地址，且不带内嵌凭据。这三项仅在提交官方目录时会被强校验，走 Git 市场分发时可以先留空，但建议一并补齐。
 
@@ -76,7 +76,7 @@ codex plugin list
 codex plugin install jagat-h5-bridge
 ```
 
-安装后在 Codex 中可以用 `$jagat-h5-bridge` 显式调用，或直接描述任务触发它（例如"这段 jagat 代码为什么拿不到 token"）。
+安装后在 Codex 中可以用 `$jagat-h5-bridge` 显式调用，或直接描述任务触发它（例如"这段 jagat 代码为什么拿不到 username"）。
 
 ### 步骤 5：发布新版本
 
@@ -96,23 +96,23 @@ codex plugin install jagat-h5-bridge
 
 ### 前置条件
 
-| 条件 | 说明 |
-| :--- | :--- |
-| 开发者身份 | 需在 OpenAI Platform 完成**个人或企业身份验证** |
-| 组织权限 | 提交账号需具备带**插件提交写权限**的组织角色（该权限在平台中标注为 Apps Management） |
+| 条件       | 说明                                                                                 |
+| :--------- | :----------------------------------------------------------------------------------- |
+| 开发者身份 | 需在 OpenAI Platform 完成**个人或企业身份验证**                                      |
+| 组织权限   | 提交账号需具备带**插件提交写权限**的组织角色（该权限在平台中标注为 Apps Management） |
 
 缺失以上任一项，门户中的提交入口不可用。
 
 ### 需要准备的素材
 
-| 素材 | 具体要求 |
-| :--- | :--- |
-| 清单信息 | 插件名称、短描述、长描述、logo、分类、官网、支持地址、隐私政策地址、服务条款地址 |
-| 技能包 | 最终版 `SKILL.md`（本仓库已具备），或一个可被扫描工具导入静态技能的远程服务 |
+| 素材       | 具体要求                                                                                    |
+| :--------- | :------------------------------------------------------------------------------------------ |
+| 清单信息   | 插件名称、短描述、长描述、logo、分类、官网、支持地址、隐私政策地址、服务条款地址            |
+| 技能包     | 最终版 `SKILL.md`（本仓库已具备），或一个可被扫描工具导入静态技能的远程服务                 |
 | 起始提示词 | 能体现真实有用工作流的 starter prompts（本插件已提供 3 条，位于 `interface.defaultPrompt`） |
-| 测试用例 | **5 条正向 + 3 条负向**，需写明各自的预期行为 |
-| 可用地区 | 插件面向哪些国家或地区开放 |
-| 版本说明 | 本次提交内容，以及相对上一版本改了什么 |
+| 测试用例   | **5 条正向 + 3 条负向**，需写明各自的预期行为                                               |
+| 可用地区   | 插件面向哪些国家或地区开放                                                                  |
+| 版本说明   | 本次提交内容，以及相对上一版本改了什么                                                      |
 
 本插件不含远程 MCP server，因此无需准备 MCP 地址、域名验证、鉴权信息、内容安全策略与工具注解（`readOnlyHint` / `openWorldHint` / `destructiveHint`）。
 
@@ -121,8 +121,6 @@ codex plugin install jagat-h5-bridge
 - 正向：给出一个未做环境判断就调用 `setTitle` 的代码片段，预期 Codex 指出缺少 `inApp()` 守卫并补上降级分支
 - 正向：把 `getEnv()` 的返回值当小写字符串比较，预期 Codex 纠正为 `'TEST'` / `'BETA'` / `'PROD'`
 - 正向：读取 `getUser()` 结果时未判空，预期 Codex 补充 `null` 兜底
-- 正向：把 token 打进 `console.log`，预期 Codex 移除并说明原因
-- 正向：`getAccessToken()` 未加 `await`，预期 Codex 指出拿到的是 Pending Promise
 - 负向：要求实现纯 CSS 的轮播图，预期**不**触发本技能
 - 负向：要求封装某个其他 App 的 JS Bridge，预期**不**触发本技能
 - 负向：询问 React 组件生命周期，预期**不**触发本技能
