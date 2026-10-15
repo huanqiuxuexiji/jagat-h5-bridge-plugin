@@ -8,7 +8,7 @@
     "url": "https://github.com/huanqiuxuexiji/jagat-h5-bridge-plugin"
   },
   "homepage": "https://www.jagat.io/registry/jagat_sdk.html",
-  "repository": "https://github.com/huanqiuxuexiji/jagat-h5-bridge-plugin",
+  "repository": "https://github.com/huanqiuxuexiji/jagat-h5-bridge-plugin.git",
   "license": "MIT",
   "keywords": ["jagat", "h5", "jsbridge", "webview", "app-bridge", "hybrid", "share", "tracking", "deeplink", "mobile-web", "vip-subscription"],
   "skills": "./skills/",
