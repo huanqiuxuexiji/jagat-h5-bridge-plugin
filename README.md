@@ -39,7 +39,7 @@
 
 ```bash
 # 登记远程市场
-codex plugin marketplace add https://github.com/huanqiuxuexiji/jagat-h5-bridge-plugin
+codex plugin marketplace add https://github.com/huanqiuxuexiji/jagat-h5-bridge-plugin.git
 
 # 查看可用插件
 codex plugin list
