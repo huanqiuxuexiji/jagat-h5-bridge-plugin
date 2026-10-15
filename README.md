@@ -90,7 +90,7 @@ cp -r plugins/jagat-h5-bridge ~/plugins/jagat-h5-bridge
 
 ## 发布前待办
 
-以下字段在 `plugin.json` 中标记为 `[TODO: ...]`，公开发布前必须替换为真实值：
+以下字段在 `plugin.json` 中：
 
 - `author.name`、`author.email`、`author.url`
 - `homepage`、`repository`
