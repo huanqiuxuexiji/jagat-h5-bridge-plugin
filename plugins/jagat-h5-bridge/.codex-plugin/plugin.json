@@ -1,0 +1,31 @@
+{
+  "name": "jagat-h5-bridge",
+  "version": "0.1.0",
+  "description": "Jagat App 的 H5 桥接库（window.jagat）接入参考，覆盖环境判断、登录态与用户信息获取、App 分享、网页标题设置、埋点上报、退出与页面跳转。",
+  "author": {
+    "name": "Lear",
+    "email": "support@jagat.io",
+    "url": "https://github.com/huanqiuxuexiji/jagat-h5-bridge-plugin"
+  },
+  "homepage": "https://www.jagat.io/registry/jagat_sdk.html",
+  "repository": "https://github.com/huanqiuxuexiji/jagat-h5-bridge-plugin",
+  "license": "MIT",
+  "keywords": ["jagat", "h5", "jsbridge", "webview", "app-bridge", "hybrid", "share", "tracking", "deeplink", "mobile-web", "vip-subscription"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Jagat H5 桥接库",
+    "shortDescription": "在 H5 网页中正确调用 Jagat App 的原生桥接能力",
+    "longDescription": "为接入 Jagat App 内嵌 WebView 的 H5 页面提供该桥接库（window.jagat）的完整权威参考。包含 17 个方法的签名、参数与返回值，以及生成代码时必须遵守的 6 条硬性约束：先做环境守卫再调用 App 专属能力、严格区分同步与异步方法、分享需由用户手势触发、对 null 值做兜底、token 不进日志、埋点属性保持扁平。同时提供标准接入范式、常见问题排查表与 TypeScript 类型声明，用于编写、修改和排错 jagat 调用代码。",
+    "developerName": "[TODO: 发布方名称]",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://www.jagat.io/registry/jagat_sdk.html",
+    "privacyPolicyURL": "https://www.jagat.io/registry/jagat_sdk.html",
+    "termsOfServiceURL": "https://www.jagat.io/registry/jagat_sdk.html",
+    "defaultPrompt": ["用 jagat 桥接库写一段 App 内页面的初始化代码", "这段 jagat 代码拿不到 token，帮我排查原因", "给这个 H5 页面加上 App 内分享和埋点上报"],
+    "brandColor": "#3B82F6",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png",
+    "screenshots": []
+  }
+}

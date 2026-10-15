@@ -1,0 +1,20 @@
+{
+  "name": "jagat-plugins",
+  "interface": {
+    "displayName": "Jagat Plugins"
+  },
+  "plugins": [
+    {
+      "name": "jagat-h5-bridge",
+      "source": {
+        "source": "local",
+        "path": "./plugins/jagat-h5-bridge"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
