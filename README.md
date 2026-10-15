@@ -2,16 +2,6 @@
 
 面向接入 Jagat App 内嵌 WebView 的 H5 开发者的 Codex 插件。它把 `window.jagat` 桥接库的完整使用规范封装成一个技能，让 Codex 在编写、修改或排查 `jagat.xxx()` 调用代码时，能直接按正确的方式产出代码，而不是靠猜。
 
-## 插件内容
-
-| 组件 | 路径 | 说明 |
-| :--- | :--- | :--- |
-| 插件清单 | `plugins/jagat-h5-bridge/.codex-plugin/plugin.json` | 插件元数据与展示信息 |
-| 技能 | `plugins/jagat-h5-bridge/skills/jagat-h5-bridge/SKILL.md` | 桥接库完整参考（17 个方法 + 6 条硬性约束） |
-| 图标资源 | `plugins/jagat-h5-bridge/assets/` | `icon.png`（256×256）、`logo.png`（512×512） |
-| 市场化目录 | `.agents/plugins/marketplace.json` | 仓库级插件市场，供 Codex 读取插件顺序与可用性 |
-
-该插件为**纯技能型**（skills-only），不包含 MCP server、App 集成与 hooks，安装后不产生任何外部网络依赖。
 
 ## 技能覆盖范围
 
