@@ -5,7 +5,7 @@ description: 在 H5 网页中编写、修改或排查 jagat 全局桥接库（wi
 
 # jagat H5 桥接库
 
-`jagat` 是 H5 网页与 Jagat App 原生能力通信的全局桥接库。通过 `<script src="./jagat.js"></script>` 引入后，它在全局（`window`）挂载 `jagat` 对象，页面代码直接调用 `jagat.xxx()` 即可使用 App 的原生能力，共 **17 个方法**。
+`jagat` 是 H5 网页与 Jagat App 原生能力通信的全局桥接库。通过 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 引入后，它在全局（`window`）挂载 `jagat` 对象，页面代码直接调用 `jagat.xxx()` 即可使用 App 的原生能力，共 **17 个方法**。
 
 本技能是该库的完整权威参考：包含全部方法签名、参数、返回值、正确用法，以及生成代码时必须遵守的约束。**在编写或修改任何涉及 `jagat` 的代码前，先读完「一、生成代码前的 6 条硬性约束」。**
 
