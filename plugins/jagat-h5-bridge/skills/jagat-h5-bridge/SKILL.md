@@ -195,7 +195,7 @@ async function applyLocale() {
 applyLocale();
 ```
 
-### `getUser(): Promise<{ nickname: string; avatar: string } | null>`
+### `getUser(): Promise<{ nickname: string; avatar: string; userId: number } | null>`
 
 获取当前用户信息。未登录或取不到时返回 `null`。**异步。**
 
@@ -205,6 +205,7 @@ applyLocale();
 | :--------- | :------- | :----------- |
 | `nickname` | `string` | 用户昵称     |
 | `avatar`   | `string` | 用户头像地址 |
+| `userId`   | `number` | 用户 id      |
 
 ```javascript
 async function renderUser() {
@@ -237,20 +238,20 @@ share: (params: {
 }) => Promise<boolean>;
 ```
 
-| 参数         | 类型     | 必填 | 说明                            |
-| :----------- | :------- | :--- | :------------------------------ |
-| `businessId` | `number` | 是   | 用户 id                         |
-| `shareType`  | `string` | 是   | 分享类型，具体枚举由 App 端约定 |
-| `text`       | `string` | 是   | 分享文本                        |
-| `picData`    | `string` | 是   | 分享图                          |
+| 参数         | 类型     | 必填 | 说明                                     |
+| :----------- | :------- | :--- | :--------------------------------------- |
+| `businessId` | `number` | 是   | 用户 id                                  |
+| `shareType`  | `string` | 是   | 分享类型，具体枚举由 App 端约定，默认 h5 |
+| `text`       | `string` | 是   | 分享文本                                 |
+| `picData`    | `string` | 是   | 分享图 Base64 编码字符串                 |
 
 ```javascript
 async function onShareClick() {
   const ok = await jagat.share({
     businessId: 10086,
-    shareType: 'link',
+    shareType: 'h5',
     text: '快来看看这个内容',
-    picData: 'https://example.com/share.png',
+    picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
   });
 
   if (ok) {
@@ -272,7 +273,7 @@ enableShare: (params: {
   enable: boolean; // 是否开启
   data: any; // 分享数据
   text: string; // 分享文本
-  picData: string; // 分享图
+  picData: string; // 分享图 Base64 编码字符串
   businessType: number;
   businessId: number;
 }) => Promise<void>;
@@ -283,7 +284,7 @@ enableShare: (params: {
 | `enable`       | `boolean` | 是   | `true` 开启，`false` 关闭   |
 | `data`         | `any`     | 是   | 分享数据，结构由 App 端约定 |
 | `text`         | `string`  | 是   | 分享文本                    |
-| `picData`      | `string`  | 是   | 分享图                      |
+| `picData`      | `string`  | 是   | 分享图 Base64 编码字符串    |
 | `businessType` | `number`  | 是   | 业务类型，枚举由 App 端约定 |
 | `businessId`   | `number`  | 是   | 用户 id                     |
 
@@ -292,7 +293,7 @@ await jagat.enableShare({
   enable: true,
   data: { url: location.href },
   text: '分享给你',
-  picData: 'https://example.com/share.png',
+  picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
   businessType: 1,
   businessId: 10086,
 });
@@ -302,7 +303,7 @@ await jagat.enableShare({
   enable: false,
   data: {},
   text: '',
-  picData: '',
+  picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
   businessType: 1,
   businessId: 10086,
 });
@@ -506,7 +507,7 @@ declare const jagat: {
   /** 获取当前app的语言 zh-CN */
   getLocale: () => Promise<string>;
   /** 获取当前用户信息 */
-  getUser: () => Promise<{ nickname: string; avatar: string } | null>;
+  getUser: () => Promise<{ nickname: string; avatar: string; userId: number } | null>;
   /** 唤醒app，并在app内打开网页 */
   openWebPageInApp: (url: string) => void;
   /** 打开AJAGAT APP */
@@ -567,16 +568,16 @@ interface Window {
 
 ### 返回值速查
 
-| 方法                                                                                           | 返回值类型                              | 说明                      |
-| :--------------------------------------------------------------------------------------------- | :-------------------------------------- | :------------------------ |
-| `isAndroid()`                                                                                  | `boolean`                               | 是否安卓                  |
-| `isIos()`                                                                                      | `boolean`                               | 是否 iOS                  |
-| `inApp()`                                                                                      | `boolean`                               | 是否在 App 内             |
-| `getEnv()`                                                                                     | `Promise<string \| null>`               | 环境值，取不到为 `null`   |
-| `isChinaApp()`                                                                                 | `Promise<boolean>`                      | 是否国内 App              |
-| `getLocale()`                                                                                  | `Promise<string>`                       | 语言标识，如 `zh-CN`      |
-| `getUser()`                                                                                    | `Promise<{ nickname, avatar } \| null>` | 用户信息，取不到为 `null` |
-| `share()`                                                                                      | `Promise<boolean>`                      | 是否分享成功              |
-| `enableShare()`                                                                                | `Promise<void>`                         | 无返回数据                |
-| `exit()` / `setTitle()` / `track()`                                                            | `void`                                  | 无返回值                  |
-| `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` | `void`                                  | 无返回值                  |
+| 方法                                                                                           | 返回值类型                                      | 说明                      |
+| :--------------------------------------------------------------------------------------------- | :---------------------------------------------- | :------------------------ |
+| `isAndroid()`                                                                                  | `boolean`                                       | 是否安卓                  |
+| `isIos()`                                                                                      | `boolean`                                       | 是否 iOS                  |
+| `inApp()`                                                                                      | `boolean`                                       | 是否在 App 内             |
+| `getEnv()`                                                                                     | `Promise<string \| null>`                       | 环境值，取不到为 `null`   |
+| `isChinaApp()`                                                                                 | `Promise<boolean>`                              | 是否国内 App              |
+| `getLocale()`                                                                                  | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
+| `getUser()`                                                                                    | `Promise<{ nickname, avatar, userId } \| null>` | 用户信息，取不到为 `null` |
+| `share()`                                                                                      | `Promise<boolean>`                              | 是否分享成功              |
+| `enableShare()`                                                                                | `Promise<void>`                                 | 无返回数据                |
+| `exit()` / `setTitle()` / `track()`                                                            | `void`                                          | 无返回值                  |
+| `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` | `void`                                          | 无返回值                  |
