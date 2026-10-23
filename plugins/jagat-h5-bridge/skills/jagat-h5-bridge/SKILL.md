@@ -78,7 +78,7 @@ if (!user) {
 | App 交互   | `share(params)`             | **异步** | 调用 App 分享                   |
 | App 交互   | `enableShare(params)`       | **异步** | 开启 App 右上角头部分享         |
 | App 交互   | `setTitle(title)`           | 同步     | 设置 App 内网页的标题           |
-| App 交互   | `track(params)`             | 同步     | 调用 App 埋点方法               |
+| App 交互   | `track(params)`             | 同步     | 调用 App 埋点方法或gtag埋点方法 |
 | App 交互   | `exit()`                    | 同步     | 退出                            |
 | 页面跳转   | `openWebPageInApp(url)`     | 同步     | 唤醒 App，并在 App 内打开网页   |
 | 页面跳转   | `openJagatApp()`            | 同步     | 打开 AJAGAT APP                 |
@@ -325,7 +325,7 @@ jagat.setTitle('活动详情');
 
 ### `track(params): void`
 
-调用 App 埋点方法上报自定义事件（同步，无返回值）。
+调用 App 埋点方法或gtag埋点方法上报自定义事件（同步，无返回值）。
 
 ```typescript
 track: (params: { eventName: string; eventAttr: Record<string, any> }) => void
