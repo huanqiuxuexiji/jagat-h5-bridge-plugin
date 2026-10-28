@@ -74,11 +74,11 @@ if (!user) {
 | 环境判断   | `getEnv()`                  | **异步** | 获取当前环境值                  |
 | 环境判断   | `isChinaApp()`              | **异步** | 是否处于国内 App                |
 | 用户与身份 | `getLocale()`               | **异步** | 获取当前 App 的语言，如 `zh-CN` |
-| 用户与身份 | `getUser()`                 | **异步** | 获取当前用户信息（昵称、头像）  |
+| 用户与身份 | `getUser()`                 | **异步** | 获取当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
 | App 交互   | `share(params)`             | **异步** | 调用 App 分享                   |
 | App 交互   | `enableShare(params)`       | **异步** | 开启 App 右上角头部分享         |
 | App 交互   | `setTitle(title)`           | 同步     | 设置 App 内网页的标题           |
-| App 交互   | `track(params)`             | 同步     | 调用 App 埋点方法               |
+| App 交互   | `track(params)`             | 同步     | 调用 App 埋点方法或gtag埋点方法 |
 | App 交互   | `exit()`                    | 同步     | 退出                            |
 | 页面跳转   | `openWebPageInApp(url)`     | 同步     | 唤醒 App，并在 App 内打开网页   |
 | 页面跳转   | `openJagatApp()`            | 同步     | 打开 AJAGAT APP                 |
@@ -195,7 +195,7 @@ async function applyLocale() {
 applyLocale();
 ```
 
-### `getUser(): Promise<{ nickname: string; avatar: string; userId: number } | null>`
+### `getUser(): Promise<{ nickname: string; avatar: string; userId: number; member: boolean } | null>`
 
 获取当前用户信息。未登录或取不到时返回 `null`。**异步。**
 
@@ -206,6 +206,7 @@ applyLocale();
 | `nickname` | `string` | 用户昵称     |
 | `avatar`   | `string` | 用户头像地址 |
 | `userId`   | `number` | 用户 id      |
+| `member`   | `boolean` | 是否是会员  |
 
 ```javascript
 async function renderUser() {
@@ -325,7 +326,7 @@ jagat.setTitle('活动详情');
 
 ### `track(params): void`
 
-调用 App 埋点方法上报自定义事件（同步，无返回值）。
+调用 App 埋点方法或gtag埋点方法上报自定义事件（同步，无返回值）。
 
 ```typescript
 track: (params: { eventName: string; eventAttr: Record<string, any> }) => void
@@ -507,7 +508,7 @@ declare const jagat: {
   /** 获取当前app的语言 zh-CN */
   getLocale: () => Promise<string>;
   /** 获取当前用户信息 */
-  getUser: () => Promise<{ nickname: string; avatar: string; userId: number } | null>;
+  getUser: () => Promise<{ nickname: string; avatar: string; userId: number; member: boolean; } | null>;
   /** 唤醒app，并在app内打开网页 */
   openWebPageInApp: (url: string) => void;
   /** 打开AJAGAT APP */
@@ -576,7 +577,7 @@ interface Window {
 | `getEnv()`                                                                                     | `Promise<string \| null>`                       | 环境值，取不到为 `null`   |
 | `isChinaApp()`                                                                                 | `Promise<boolean>`                              | 是否国内 App              |
 | `getLocale()`                                                                                  | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
-| `getUser()`                                                                                    | `Promise<{ nickname, avatar, userId } \| null>` | 用户信息，取不到为 `null` |
+| `getUser()`                                                                                    | `Promise<{ nickname, avatar, member, userId } \| null>` | 用户信息，取不到为 `null` |
 | `share()`                                                                                      | `Promise<boolean>`                              | 是否分享成功              |
 | `enableShare()`                                                                                | `Promise<void>`                                 | 无返回数据                |
 | `exit()` / `setTitle()` / `track()`                                                            | `void`                                          | 无返回值                  |
