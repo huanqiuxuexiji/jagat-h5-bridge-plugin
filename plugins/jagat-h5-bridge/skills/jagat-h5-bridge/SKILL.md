@@ -5,7 +5,7 @@ description: 在 H5 网页中编写、修改或排查 jagat 全局桥接库（wi
 
 # jagat H5 桥接库
 
-`jagat` 是 H5 网页与 Jagat App 原生能力通信的全局桥接库。通过 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 引入后，它在全局（`window`）挂载 `jagat` 对象，页面代码直接调用 `jagat.xxx()` 即可使用 App 的原生能力，共 **17 个方法**。
+`jagat` 是 H5 网页与 Jagat App 原生能力通信的全局桥接库。通过 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 引入后，它在全局（`window`）挂载 `jagat` 对象，页面代码直接调用 `jagat.xxx()` 即可使用 App 的原生能力，共 **17 个方法**。注意：国内活动需要更改引入文件`<script src="https://www.jagat.cn/registry/jagat_sdk.js"></script>`的加载速度更快。
 
 本技能是该库的完整权威参考：包含全部方法签名、参数、返回值、正确用法，以及生成代码时必须遵守的约束。**在编写或修改任何涉及 `jagat` 的代码前，先读完「一、生成代码前的 6 条硬性约束」。**
 
@@ -527,16 +527,16 @@ interface Window {
 
 ## 九、常见问题排查
 
-| 现象                              | 根因                                         | 修复方式                                                                                           |
-| :-------------------------------- | :------------------------------------------- | :------------------------------------------------------------------------------------------------- |
-| `jagat is not defined`            | 脚本未加载，或在模块化环境中试图 `import` 它 | 确认 `<script src="./jagat.js"></script>` 已在业务代码前加载；该库是全局挂载，不要用 `import` 引入 |
-| 拿到的是 `Promise` 对象而不是数据 | 对异步方法漏了 `await`                       | 给 `getEnv`/`isChinaApp`/`getLocale`/`getUser`/`share`/`enableShare` 补上 `await`                  |
-| `Cannot read properties of null`  | 未对 `null` 返回值判空                       | `getEnv`、`getUser` 返回值使用前先判断                                                             |
-| 调用后毫无反应、控制台也无报错    | 当前不在 App 内，桥接层未注入                | 先用 `inApp()` 判断，非 App 环境走降级分支                                                         |
-| 分享面板不弹、App 唤不起来        | 在非用户手势的时机调用                       | 把调用移入 `click` 等用户手势回调                                                                  |
-| `setTitle` 设置后页面标题没变     | 当前不在 App 内                              | 该能力仅 App 内生效，普通浏览器需改 `<title>`                                                      |
-| 埋点数据在 App 端缺失             | `eventAttr` 传了嵌套对象                     | 拆平为一层基础类型键值对                                                                           |
-| 环境判断逻辑失效                  | 硬编码了小写或变体字符串                     | 只使用 `'TEST'` / `'BETA'` / `'PROD'` 三个大写枚举值                                               |
+| 现象                              | 根因                                         | 修复方式                                                                                                                           |
+| :-------------------------------- | :------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `jagat is not defined`            | 脚本未加载，或在模块化环境中试图 `import` 它 | 确认 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 已在业务代码前加载；该库是全局挂载，不要用 `import` 引入 |
+| 拿到的是 `Promise` 对象而不是数据 | 对异步方法漏了 `await`                       | 给 `getEnv`/`isChinaApp`/`getLocale`/`getUser`/`share`/`enableShare` 补上 `await`                                                  |
+| `Cannot read properties of null`  | 未对 `null` 返回值判空                       | `getEnv`、`getUser` 返回值使用前先判断                                                                                             |
+| 调用后毫无反应、控制台也无报错    | 当前不在 App 内，桥接层未注入                | 先用 `inApp()` 判断，非 App 环境走降级分支                                                                                         |
+| 分享面板不弹、App 唤不起来        | 在非用户手势的时机调用                       | 把调用移入 `click` 等用户手势回调                                                                                                  |
+| `setTitle` 设置后页面标题没变     | 当前不在 App 内                              | 该能力仅 App 内生效，普通浏览器需改 `<title>`                                                                                      |
+| 埋点数据在 App 端缺失             | `eventAttr` 传了嵌套对象                     | 拆平为一层基础类型键值对                                                                                                           |
+| 环境判断逻辑失效                  | 硬编码了小写或变体字符串                     | 只使用 `'TEST'` / `'BETA'` / `'PROD'` 三个大写枚举值                                                                               |
 
 ---
 
