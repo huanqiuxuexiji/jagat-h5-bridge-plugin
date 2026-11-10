@@ -88,7 +88,7 @@ if (!user) {
 
 ### `isAndroid(): boolean`
 
-判断当前运行环境是否是安卓（同步，直接返回结果）。
+判断当前运行环境是否是安卓（同步，直接返回结果）。**app内或app外都可以直接调用生效**。
 
 ```javascript
 if (jagat.isAndroid()) {
@@ -98,7 +98,7 @@ if (jagat.isAndroid()) {
 
 ### `isIos(): boolean`
 
-判断当前运行环境是否是 iOS（同步）。
+判断当前运行环境是否是 iOS（同步）。**app内或app外都可以直接调用生效**。
 
 ```javascript
 if (jagat.isIos()) {
@@ -110,7 +110,7 @@ if (jagat.isIos()) {
 
 ### `inApp(): boolean`
 
-判断当前页面是否运行在 App 内（即被 App 内嵌的 WebView 打开）。这是所有 App 专属能力调用的前置校验。同步。
+判断当前页面是否运行在 App 内（即被 App 内嵌的 WebView 打开）。同步。**app内或app外都可以直接调用生效**。
 
 ```javascript
 if (jagat.inApp()) {
@@ -122,7 +122,7 @@ if (jagat.inApp()) {
 
 ### `getEnv(): Promise<string | null>`
 
-获取当前环境值，成功返回环境枚举字符串，取不到返回 `null`。**异步。**
+获取当前环境值，成功返回环境枚举字符串，取不到返回 `null`。**异步。**。**app内可以直接调用生效**。
 
 **环境枚举值（固定三个大写字符串，不得写小写或其他变体）：**
 
@@ -158,7 +158,7 @@ checkEnv();
 
 ### `isChinaApp(): Promise<boolean>`
 
-判断当前是否处于国内 App。国内版返回 `true`，海外版返回 `false`。**异步。**
+判断当前是否处于国内 App。国内版返回 `true`，海外版返回 `false`。**异步。**。**app内可以直接调用生效**。
 
 ```javascript
 async function initByRegion() {
@@ -178,7 +178,7 @@ initByRegion();
 
 ### `getLocale(): Promise<string>`
 
-获取当前 App 的语言标识，形如 `zh-CN`。**异步。**
+获取当前 App或浏览器的语言标识，形如 `zh-CN`。**异步。**。**app内或app外都可以直接调用生效**。
 
 ```javascript
 async function applyLocale() {
@@ -194,7 +194,7 @@ applyLocale();
 
 ### `getUser(): Promise<{ nickname: string; avatar: string; userId: number; member: boolean } | null>`
 
-获取当前用户信息。未登录或取不到时返回 `null`。**异步。**
+获取当前用户信息。未登录或不在app内或取不到时返回 `null`。**异步。**。**app内或app外都可以直接调用生效**。
 
 返回字段：
 
@@ -225,7 +225,7 @@ renderUser();
 
 ### `share(params): Promise<boolean>`
 
-调用 App 分享，唤起原生分享面板。分享成功返回 `true`；用户取消或失败返回 `false`。**异步。**
+调用 App 分享，唤起原生分享面板。分享成功返回 `true`；用户取消或失败返回 `false`。**异步。**。**app内可以直接调用生效**。
 
 ```typescript
 share: (params: {
@@ -264,7 +264,7 @@ async function onShareClick() {
 
 ### `enableShare(params): Promise<void>`
 
-开启 / 关闭 App 右上角**常驻**的分享入口，无返回数据。**异步。**
+开启 / 关闭 App 右上角**常驻**的分享入口，无返回数据。**异步。**。**app内可以直接调用生效**。
 
 ```typescript
 enableShare: (params: {
@@ -311,7 +311,7 @@ await jagat.enableShare({
 
 ### `setTitle(title): void`
 
-设置 App 内网页的标题（同步）。**只在 App 内生效**，普通浏览器中标题由页面自身 `<title>` 决定。
+设置 App 内网页的标题（同步）。普通浏览器中标题由页面自身 `<title>` 决定。**app内或app外都可以直接调用生效**。
 
 | 参数    | 类型     | 必填 | 说明             |
 | :------ | :------- | :--- | :--------------- |
@@ -323,7 +323,7 @@ jagat.setTitle('活动详情');
 
 ### `track(params): void`
 
-调用 App 埋点方法或gtag埋点方法上报自定义事件（同步，无返回值）。
+调用 App 埋点方法或gtag埋点方法上报自定义事件（同步，无返回值）。**app内或app外都可以直接调用生效**。
 
 ```typescript
 track: (params: { eventName: string; eventAttr: Record<string, any> }) => void
@@ -349,7 +349,7 @@ jagat.track({
 
 ### `exit(): void`
 
-退出（同步）。不可逆操作，调用前建议加二次确认。
+退出或关闭当前网页（同步）。不可逆操作，调用前建议加二次确认。**app内或app外都可以直接调用生效**。
 
 ```javascript
 document.getElementById('exit-btn').addEventListener('click', () => {
@@ -363,7 +363,7 @@ document.getElementById('exit-btn').addEventListener('click', () => {
 
 ### `openWebPageInApp(url): void`
 
-唤醒 App，并在 App 内打开网页（同步）。
+唤醒 App，并在 App 内打开网页（同步）。**app内或app外都可以直接调用生效**。
 
 | 参数  | 类型     | 必填 | 说明                      |
 | :---- | :------- | :--- | :------------------------ |
@@ -377,7 +377,7 @@ jagat.openWebPageInApp('https://example.com/detail?id=123');
 
 ### `openJagatApp(): void`
 
-打开 AJAGAT APP（同步，无参数）。
+打开 AJAGAT APP（同步，无参数）。**app外可以直接调用生效**。
 
 ```javascript
 if (!jagat.inApp()) {
@@ -391,7 +391,7 @@ if (!jagat.inApp()) {
 
 ### `openWebPageInBrowser(url): void`
 
-使用手机浏览器打开网页（同步）。
+使用手机浏览器打开网页（同步）。**app内或app外都可以直接调用生效**。
 
 | 参数  | 类型     | 必填 | 说明                         |
 | :---- | :------- | :--- | :--------------------------- |
@@ -403,21 +403,17 @@ jagat.openWebPageInBrowser('https://example.com');
 
 ### `openVipOrderPageInApp(): void`
 
-打开 VIP 订阅页（同步，无参数）。
+唤醒app，打开 VIP 订阅页（同步，无参数）。**app内或app外都可以直接调用生效**。
 
 ```javascript
 document.getElementById('vip-btn').addEventListener('click', () => {
-  if (jagat.inApp()) {
-    jagat.openVipOrderPageInApp();
-  } else {
-    jagat.openJagatApp();
-  }
+  jagat.openVipOrderPageInApp();
 });
 ```
 
 ### `showInterstitialAd(): Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error'; message: string;}>`
 
-显示1次腾讯插屏广告。
+显示1次腾讯插屏广告（异步，无参数）。**app内或app外都可以直接调用生效**。
 
 ```javascript
 document.getElementById('vip-btn').addEventListener('click', () => {
