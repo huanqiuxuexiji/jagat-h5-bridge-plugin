@@ -415,7 +415,7 @@ document.getElementById('vip-btn').addEventListener('click', () => {
 });
 ```
 
-### `showInterstitialAd(): Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error'; message: string;}>`
+### `showInterstitialAd(): Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error'; message: string;}>`
 
 显示1次腾讯插屏广告。
 
