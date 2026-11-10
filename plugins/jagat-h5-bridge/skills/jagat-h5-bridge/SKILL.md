@@ -525,7 +525,7 @@ declare const jagat: {
   /** 打开Vip订阅页 */
   openVipOrderPageInApp: () => void;
   /** 显示1次腾讯插屏广告 */
-  showInterstitialAd: () => Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error'; message: string;}>;
+  showInterstitialAd: () => Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error'; message: string;}>;
 };
 
 interface Window {
