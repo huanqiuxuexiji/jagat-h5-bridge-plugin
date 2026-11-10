@@ -80,7 +80,7 @@ if (!user) {
 | 页面跳转   | `openJagatApp()`            | 同步     | 打开 AJAGAT APP                 |
 | 页面跳转   | `openWebPageInBrowser(url)` | 同步     | 使用手机浏览器打开网页          |
 | 页面跳转   | `openVipOrderPageInApp()`   | 同步     | 打开 VIP 订阅页                 |
-| 页面跳转   | `showInterstitialAd()`      | 同步     | 显示1次腾讯插屏广告             |
+| 页面跳转   | `showInterstitialAd()`      | **异步** | 显示1次腾讯插屏广告             |
 
 ---
 
@@ -524,6 +524,7 @@ declare const jagat: {
   openWebPageInBrowser: (url: string) => void;
   /** 打开Vip订阅页 */
   openVipOrderPageInApp: () => void;
+  /** 显示1次腾讯插屏广告 */
   showInterstitialAd: () => Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error'; message: string;}>;
 };
 
@@ -570,7 +571,6 @@ interface Window {
 | `track`                | `eventAttr`    | `Record<string, any>` | 事件属性                 |
 | `openWebPageInApp`     | `url`          | `string`              | App 内打开的网页地址     |
 | `openWebPageInBrowser` | `url`          | `string`              | 手机浏览器打开的网页地址 |
-| `showInterstitialAd`   | `url`          | `string`              | 显示1次腾讯插屏广告 |
 
 ### 无参方法
 
