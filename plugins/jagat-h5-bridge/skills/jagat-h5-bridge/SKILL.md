@@ -17,14 +17,10 @@ description: 在 H5 网页中编写、修改或排查 jagat 全局桥接库（wi
 
 ### 1. 先判断环境，再调用 App 专属能力
 
-`inApp()` 是所有 App 专属能力的前置判断依据，**必须**作为最外层守卫。`share`、`enableShare`、`setTitle`、`track`、`exit`、`openVipOrderPageInApp`、`openWebPageInApp` 都应在 `if (jagat.inApp())` 分支内调用，并为非 App 环境准备降级方案（通常是引导 `openJagatApp()` 或提示去应用商店）。
+`inApp()` 是所有 App 专属能力的前置判断依据，**必须**作为最外层守卫。`share`、`enableShare`、`setTitle`、`track`、`exit`、`openVipOrderPageInApp`、`openWebPageInApp` 的每个方法内已经为非 App 环境准备降级方案（通常是引导 `openJagatApp()` 或提示去应用商店）。
 
 ```javascript
-if (jagat.inApp()) {
-  jagat.openVipOrderPageInApp();
-} else {
-  jagat.openJagatApp(); // 降级：引导打开 App
-}
+jagat.openVipOrderPageInApp();
 ```
 
 ### 2. 严格区分同步方法与异步方法
@@ -84,6 +80,7 @@ if (!user) {
 | 页面跳转   | `openJagatApp()`            | 同步     | 打开 AJAGAT APP                 |
 | 页面跳转   | `openWebPageInBrowser(url)` | 同步     | 使用手机浏览器打开网页          |
 | 页面跳转   | `openVipOrderPageInApp()`   | 同步     | 打开 VIP 订阅页                 |
+| 页面跳转   | `showInterstitialAd()`      | 同步     | 显示1次腾讯插屏广告             |
 
 ---
 
@@ -418,6 +415,16 @@ document.getElementById('vip-btn').addEventListener('click', () => {
 });
 ```
 
+### `showInterstitialAd(): Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error'; message: string;}>`
+
+显示1次腾讯插屏广告。
+
+```javascript
+document.getElementById('vip-btn').addEventListener('click', () => {
+  jagat.showInterstitialAd();
+});
+```
+
 ---
 
 ## 七、标准接入范式
@@ -517,6 +524,7 @@ declare const jagat: {
   openWebPageInBrowser: (url: string) => void;
   /** 打开Vip订阅页 */
   openVipOrderPageInApp: () => void;
+  showInterstitialAd: () => Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error'; message: string;}>;
 };
 
 interface Window {
@@ -583,4 +591,4 @@ interface Window {
 | `enableShare()`                                                                                | `Promise<void>`                                 | 无返回数据                |
 | `exit()` / `setTitle()` / `track()`                                                            | `void`                                          | 无返回值                  |
 | `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` | `void`                                          | 无返回值                  |
-| `showInterstitialAd()`                                                                         | `Promise<void>`                    | 无返回值                |
+| `showInterstitialAd()`                                                                         | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error'; message: string;}>`  | 返回广告显示状态信息     |
