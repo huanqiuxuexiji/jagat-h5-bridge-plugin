@@ -562,6 +562,7 @@ interface Window {
 | `track`                | `eventAttr`    | `Record<string, any>` | 事件属性                 |
 | `openWebPageInApp`     | `url`          | `string`              | App 内打开的网页地址     |
 | `openWebPageInBrowser` | `url`          | `string`              | 手机浏览器打开的网页地址 |
+| `showInterstitialAd`   | `url`          | `string`              | 显示1次腾讯插屏广告 |
 
 ### 无参方法
 
@@ -582,3 +583,4 @@ interface Window {
 | `enableShare()`                                                                                | `Promise<void>`                                 | 无返回数据                |
 | `exit()` / `setTitle()` / `track()`                                                            | `void`                                          | 无返回值                  |
 | `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` | `void`                                          | 无返回值                  |
+| `showInterstitialAd()`                                                                         | `Promise<void>`                    | 无返回值                |
