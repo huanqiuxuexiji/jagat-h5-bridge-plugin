@@ -411,7 +411,7 @@ document.getElementById('vip-btn').addEventListener('click', () => {
 });
 ```
 
-### `showInterstitialAd(): Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error'; message: string;}>`
+### `showInterstitialAd(): Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>`
 
 显示1次腾讯插屏广告（异步，无参数）。**app内或app外都可以直接调用生效**。
 
@@ -521,7 +521,7 @@ declare const jagat: {
   /** 打开Vip订阅页 */
   openVipOrderPageInApp: () => void;
   /** 显示1次腾讯插屏广告 */
-  showInterstitialAd: () => Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error'; message: string;}>;
+  showInterstitialAd: () => Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>;
 };
 
 interface Window {
@@ -587,4 +587,4 @@ interface Window {
 | `enableShare()`                                                                                | `Promise<void>`                                 | 无返回数据                |
 | `exit()` / `setTitle()` / `track()`                                                            | `void`                                          | 无返回值                  |
 | `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` | `void`                                          | 无返回值                  |
-| `showInterstitialAd()`                                                                         | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error'; message: string;}>`  | 返回广告显示状态信息     |
+| `showInterstitialAd()`                                                                         | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
