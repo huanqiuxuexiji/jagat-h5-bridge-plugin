@@ -5,7 +5,7 @@ description: 在 H5 网页中编写、修改或排查 jagat 全局桥接库（wi
 
 # jagat H5 桥接库
 
-`jagat` 是 H5 网页与 Jagat App 原生能力通信的全局桥接库。通过 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 引入后，它在全局（`window`）挂载 `jagat` 对象，页面代码直接调用 `jagat.xxx()` 即可使用 App 的原生能力，共 **17 个方法**。注意：国内活动需要更改引入文件`<script src="https://www.jagat.cn/registry/jagat_sdk.js"></script>`的加载速度更快。
+`jagat` 是 H5 网页与 JAGAT App 原生能力通信的全局桥接库。通过 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 引入后，它在全局（`window`）挂载 `jagat` 对象，页面代码直接调用 `jagat.xxx()` 即可使用 App 的原生能力，共 **17 个方法**。注意：国内活动需要更改引入文件`<script src="https://www.jagat.cn/registry/jagat_sdk.js"></script>`的加载速度更快。
 
 本技能是该库的完整权威参考：包含全部方法签名、参数、返回值、正确用法，以及生成代码时必须遵守的约束。**在编写或修改任何涉及 `jagat` 的代码前，先读完「一、生成代码前的 6 条硬性约束」。**
 
@@ -15,9 +15,9 @@ description: 在 H5 网页中编写、修改或排查 jagat 全局桥接库（wi
 
 这 6 条是接入该库时最容易出错的地方，生成代码时必须逐条满足。
 
-### 1. 先判断环境，再调用 App 专属能力
+### 1. 可以先判断环境，再调用部分 JAGAT App 专属能力
 
-`inApp()` 是所有 App 专属能力的前置判断依据，**必须**作为最外层守卫。`share`、`enableShare`、`setTitle`、`track`、`exit`、`openVipOrderPageInApp`、`openWebPageInApp` 的每个方法内已经为非 App 环境准备降级方案（通常是引导 `openJagatApp()` 或提示去应用商店）。
+`inApp()` 是JAGAT App 专属能力的前置判断依据，**必须**作为最外层守卫。`share`、`enableShare`、`setTitle`、`track`、`exit`、`openVipOrderPageInApp`、`openWebPageInApp`、`openMiniInApp` 的每个方法内已经为非 App 环境准备降级方案（通常是引导 `openJagatApp()` 或提示去应用商店）。
 
 ```javascript
 jagat.openVipOrderPageInApp();
@@ -65,22 +65,23 @@ if (!user) {
 | 分类       | 方法                        | 调用方式 | 功能摘要                        |
 | :--------- | :-------------------------- | :------- | :------------------------------ |
 | 环境判断   | `isAndroid()`               | 同步     | 是否是安卓                      |
-| 环境判断   | `isIos()`                   | 同步     | 是否是 iOS                      |
-| 环境判断   | `inApp()`                   | 同步     | 是否处于 App 内                 |
-| 环境判断   | `getEnv()`                  | **异步** | 获取当前环境值                  |
-| 环境判断   | `isChinaApp()`              | **异步** | 是否处于国内 App                |
-| 用户与身份 | `getLocale()`               | **异步** | 获取当前 App 的语言，如 `zh-CN` |
-| 用户与身份 | `getUser()`                 | **异步** | 获取当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
-| App 交互   | `share(params)`             | **异步** | 调用 App 分享                   |
-| App 交互   | `enableShare(params)`       | **异步** | 开启 App 右上角头部分享         |
-| App 交互   | `setTitle(title)`           | 同步     | 设置 App 内网页的标题           |
-| App 交互   | `track(params)`             | 同步     | 调用 App 埋点方法或gtag埋点方法 |
-| App 交互   | `exit()`                    | 同步     | 退出                            |
-| 页面跳转   | `openWebPageInApp(url)`     | 同步     | 唤醒 App，并在 App 内打开网页   |
-| 页面跳转   | `openJagatApp()`            | 同步     | 打开 AJAGAT APP                 |
-| 页面跳转   | `openWebPageInBrowser(url)` | 同步     | 使用手机浏览器打开网页          |
-| 页面跳转   | `openVipOrderPageInApp()`   | 同步     | 打开 VIP 订阅页                 |
-| 页面跳转   | `showInterstitialAd()`      | **异步** | 显示1次腾讯插屏广告             |
+| 环境判断   | `isIos()`                   | 同步     | 是否是 iOS                                    |
+| 环境判断   | `inApp()`                   | 同步     | 是否处于JAGAT APP内                           |
+| 环境判断   | `getEnv()`                  | **异步** | 获取当前环境值                                |
+| 环境判断   | `isChinaApp()`              | **异步** | 是否处于国内JAGAT APP                         |
+| 用户与身份 | `getLocale()`               | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
+| 用户与身份 | `getUser()`                 | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
+| App 交互   | `share(params)`             | **异步** | 调用JAGAT APP内的分享                         |
+| App 交互   | `enableShare(params)`       | **异步** | 开启JAGAT APP内的右上角头部分享                |
+| App 交互   | `setTitle(title)`           | 同步     | 设置JAGAT APP内的网页标题或浏览器网页标题      |
+| App 交互   | `track(params)`             | 同步     | 调用JAGAT APP内的埋点方法或gtag埋点方法        |
+| App 交互   | `exit()`                    | 同步     | 退出或关闭网页                                |
+| 页面跳转   | `openWebPageInApp(url)`     | 同步     | 唤醒JAGAT APP，并在JAGAT APP内的内打开网页     |
+| 页面跳转   | `openJagatApp()`            | 同步     | 唤醒 JAGAT APP                                |
+| 页面跳转   | `openWebPageInBrowser(url)` | 同步     | 在JAGAT APP内使用手机浏览器打开网页            |
+| 页面跳转   | `openVipOrderPageInApp()`   | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的Vip订阅页      |
+| 页面跳转   | `openMiniInApp()`           | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的小程序         |
+| 页面跳转   | `showInterstitialAd()`      | **异步** | 显示1次腾讯插屏广告                            |
 
 ---
 
@@ -110,7 +111,7 @@ if (jagat.isIos()) {
 
 ### `inApp(): boolean`
 
-判断当前页面是否运行在 App 内（即被 App 内嵌的 WebView 打开）。同步。**app内或app外都可以直接调用生效**。
+判断当前页面是否运行在JAGAT APP内（即被 App 内嵌的 WebView 打开）。同步。**app内或app外都可以直接调用生效**。
 
 ```javascript
 if (jagat.inApp()) {
@@ -158,7 +159,7 @@ checkEnv();
 
 ### `isChinaApp(): Promise<boolean>`
 
-判断当前是否处于国内 App。国内版返回 `true`，海外版返回 `false`。**异步。**。**app内可以直接调用生效**。
+判断当前是否处于国内JAGAT APP。国内版返回 `true`，海外版返回 `false`。**异步。**。**app内可以直接调用生效**。
 
 ```javascript
 async function initByRegion() {
@@ -178,7 +179,7 @@ initByRegion();
 
 ### `getLocale(): Promise<string>`
 
-获取当前 App或浏览器的语言标识，形如 `zh-CN`。**异步。**。**app内或app外都可以直接调用生效**。
+获取JAGAT APP内的语言 或 浏览器的语言标识，形如 `zh-CN`。**异步。**。**app内或app外都可以直接调用生效**。
 
 ```javascript
 async function applyLocale() {
@@ -194,7 +195,7 @@ applyLocale();
 
 ### `getUser(): Promise<{ nickname: string; avatar: string; userId: number; member: boolean } | null>`
 
-获取当前用户信息。未登录或不在app内或取不到时返回 `null`。**异步。**。**app内或app外都可以直接调用生效**。
+获取JAGAT APP内的当前用户信息。未登录或不在app内或取不到时返回 `null`。**异步。**。**app内或app外都可以直接调用生效**。
 
 返回字段：
 
@@ -225,7 +226,7 @@ renderUser();
 
 ### `share(params): Promise<boolean>`
 
-调用 App 分享，唤起原生分享面板。分享成功返回 `true`；用户取消或失败返回 `false`。**异步。**。**app内可以直接调用生效**。
+调用JAGAT APP内的分享，唤起原生分享面板。分享成功返回 `true`；用户取消或失败返回 `false`。**异步。**。**app内可以直接调用生效**。
 
 ```typescript
 share: (params: {
@@ -264,7 +265,7 @@ async function onShareClick() {
 
 ### `enableShare(params): Promise<void>`
 
-开启 / 关闭 App 右上角**常驻**的分享入口，无返回数据。**异步。**。**app内可以直接调用生效**。
+开启 / 关闭 JAGAT APP内的右上角**常驻**的分享入口，无返回数据。**异步。**。**app内可以直接调用生效**。
 
 ```typescript
 enableShare: (params: {
@@ -311,7 +312,7 @@ await jagat.enableShare({
 
 ### `setTitle(title): void`
 
-设置 App 内网页的标题（同步）。普通浏览器中标题由页面自身 `<title>` 决定。**app内或app外都可以直接调用生效**。
+设置JAGAT APP内的网页标题或浏览器网页标题（同步）。普通浏览器中标题由页面自身 `<title>` 决定。**app内或app外都可以直接调用生效**。
 
 | 参数    | 类型     | 必填 | 说明             |
 | :------ | :------- | :--- | :--------------- |
@@ -323,7 +324,7 @@ jagat.setTitle('活动详情');
 
 ### `track(params): void`
 
-调用 App 埋点方法或gtag埋点方法上报自定义事件（同步，无返回值）。**app内或app外都可以直接调用生效**。
+调用JAGAT APP内的埋点方法 或 gtag埋点方法上报自定义事件（同步，无返回值）。**app内或app外都可以直接调用生效**。
 
 ```typescript
 track: (params: { eventName: string; eventAttr: Record<string, any> }) => void
@@ -363,7 +364,7 @@ document.getElementById('exit-btn').addEventListener('click', () => {
 
 ### `openWebPageInApp(url): void`
 
-唤醒 App，并在 App 内打开网页（同步）。**app内或app外都可以直接调用生效**。
+唤醒JAGAT APP，并在JAGAT APP内的打开网页（同步）。**app内或app外都可以直接调用生效**。
 
 | 参数  | 类型     | 必填 | 说明                      |
 | :---- | :------- | :--- | :------------------------ |
@@ -377,7 +378,7 @@ jagat.openWebPageInApp('https://example.com/detail?id=123');
 
 ### `openJagatApp(): void`
 
-打开 AJAGAT APP（同步，无参数）。**app外可以直接调用生效**。
+唤醒JAGAT APP（同步，无参数）。**app外可以直接调用生效**。
 
 ```javascript
 if (!jagat.inApp()) {
@@ -391,7 +392,7 @@ if (!jagat.inApp()) {
 
 ### `openWebPageInBrowser(url): void`
 
-使用手机浏览器打开网页（同步）。**app内或app外都可以直接调用生效**。
+在JAGAT APP内使用手机浏览器打开网页（同步）。**app内或app外都可以直接调用生效**。
 
 | 参数  | 类型     | 必填 | 说明                         |
 | :---- | :------- | :--- | :--------------------------- |
@@ -403,11 +404,31 @@ jagat.openWebPageInBrowser('https://example.com');
 
 ### `openVipOrderPageInApp(): void`
 
-唤醒app，打开 VIP 订阅页（同步，无参数）。**app内或app外都可以直接调用生效**。
+唤醒JAGAT APP，打开JAGAT APP内的VIP 订阅页（同步，无参数）。**app内或app外都可以直接调用生效**。
 
 ```javascript
 document.getElementById('vip-btn').addEventListener('click', () => {
   jagat.openVipOrderPageInApp();
+});
+```
+
+### `openMiniInApp(params): void`
+
+唤醒JAGAT APP，打开JAGAT APP内的小程序（同步，无参数）。**app内或app外都可以直接调用生效**。
+
+```typescript
+openMiniInApp: (params: { appletId: string; path: string; query: Record<string, any> }) => void;
+```
+
+| 参数         | 类型     | 必填 | 说明                                     |
+| :----------- | :-------------------- | :--------- | :------------------------------------------------ |
+| `appletId`   | `string`              | 是         | 小程序的id                                        |
+| `path`       | `string`              | 是         | 小程序首页路径，默认 `pages/index/index`           |
+| `query`      | `Record<string, any>` | 否         | 额外参数，默认 `{ from: window.location.href}`     |
+
+```javascript
+document.getElementById('mini-btn').addEventListener('click', () => {
+  jagat.openMiniInApp({ appletId: 'fc2942257239592965', path: 'pages/index/index', query: {from: window.location.href } });
 });
 ```
 
@@ -416,7 +437,7 @@ document.getElementById('vip-btn').addEventListener('click', () => {
 显示1次腾讯插屏广告（异步，无参数）。**app内或app外都可以直接调用生效**。
 
 ```javascript
-document.getElementById('vip-btn').addEventListener('click', () => {
+document.getElementById('show-ad-btn').addEventListener('click', () => {
   jagat.showInterstitialAd();
 });
 ```
@@ -473,15 +494,15 @@ declare const jagat: {
   isAndroid: () => boolean;
   /** 是否是ios */
   isIos: () => boolean;
-  /** 是否处于app内 */
+  /**是否处于JAGAT APP内 */
   inApp: () => boolean;
   /** 获取当前环境值 */
   getEnv: () => Promise<string | null>;
-  /** 是否处于国内app */
+  /** 是否处于国内JAGAT APP */
   isChinaApp: () => Promise<boolean>;
   /** 退出 */
   exit: () => void;
-  /** 调用app分享 */
+  /** 调用JAGAT APP内的分享 */
   share: (params: {
     /** 用户id */
     businessId: number;
@@ -492,9 +513,9 @@ declare const jagat: {
     /** 分享图 */
     picData: string;
   }) => Promise<boolean>;
-  /** 设置app内网页的标题 */
+  /** 设置JAGAT APP内的网页标题或浏览器网页标题 */
   setTitle: (title: string) => void;
-  /** 开启app右上角头部分享 */
+  /** 开启JAGAT APP内的右上角头部分享 */
   enableShare: (params: {
     enable: boolean;
     /** 分享数据 */
@@ -506,20 +527,22 @@ declare const jagat: {
     businessType: number;
     businessId: number;
   }) => Promise<void>;
-  /** 调用app埋点方法 */
+  /** 调用JAGAT APP内的埋点方法或gtag埋点方法 */
   track: (params: { eventName: string; eventAttr: Record<string, any> }) => void;
-  /** 获取当前app的语言 zh-CN */
+  /** 获取JAGAT APP内的语言 zh-CN */
   getLocale: () => Promise<string>;
-  /** 获取当前用户信息 */
+  /** 获取JAGAT APP内的当前用户信息 */
   getUser: () => Promise<{ nickname: string; avatar: string; userId: number; member: boolean; } | null>;
-  /** 唤醒app，并在app内打开网页 */
+  /** 唤醒JAGAT APP，并在JAGAT APP内的内打开网页 */
   openWebPageInApp: (url: string) => void;
-  /** 打开AJAGAT APP */
+  /** 唤醒JAGAT APP */
   openJagatApp: () => void;
-  /** 使用手机浏览器打开网页 */
+  /**在JAGAT APP内使用手机浏览器打开网页 */
   openWebPageInBrowser: (url: string) => void;
-  /** 打开Vip订阅页 */
+  /** 唤醒JAGAT APP，打开JAGAT APP内的Vip订阅页 */
   openVipOrderPageInApp: () => void;
+  /** 唤醒JAGAT APP，打开JAGAT APP内的小程序 */
+  openMiniInApp: (params: { appletId: string; path: string; query: Record<string, any> }) => void;
   /** 显示1次腾讯插屏广告 */
   showInterstitialAd: () => Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>;
 };
@@ -546,27 +569,6 @@ interface Window {
 
 ---
 
-## 十、速查表
-
-### 需要传参的方法
-
-| 方法                   | 参数           | 类型                  | 说明                     |
-| :--------------------- | :------------- | :-------------------- | :----------------------- |
-| `share`                | `businessId`   | `number`              | 用户 id                  |
-| `share`                | `shareType`    | `string`              | 分享类型                 |
-| `share`                | `text`         | `string`              | 分享文本                 |
-| `share`                | `picData`      | `string`              | 分享图                   |
-| `enableShare`          | `enable`       | `boolean`             | 是否开启右上角分享       |
-| `enableShare`          | `data`         | `any`                 | 分享数据                 |
-| `enableShare`          | `text`         | `string`              | 分享文本                 |
-| `enableShare`          | `picData`      | `string`              | 分享图                   |
-| `enableShare`          | `businessType` | `number`              | 业务类型                 |
-| `enableShare`          | `businessId`   | `number`              | 用户 id                  |
-| `setTitle`             | `title`        | `string`              | 网页标题                 |
-| `track`                | `eventName`    | `string`              | 事件名称                 |
-| `track`                | `eventAttr`    | `Record<string, any>` | 事件属性                 |
-| `openWebPageInApp`     | `url`          | `string`              | App 内打开的网页地址     |
-| `openWebPageInBrowser` | `url`          | `string`              | 手机浏览器打开的网页地址 |
 
 ### 无参方法
 
@@ -574,17 +576,17 @@ interface Window {
 
 ### 返回值速查
 
-| 方法                                                                                           | 返回值类型                                      | 说明                      |
-| :--------------------------------------------------------------------------------------------- | :---------------------------------------------- | :------------------------ |
-| `isAndroid()`                                                                                  | `boolean`                                       | 是否安卓                  |
-| `isIos()`                                                                                      | `boolean`                                       | 是否 iOS                  |
-| `inApp()`                                                                                      | `boolean`                                       | 是否在 App 内             |
-| `getEnv()`                                                                                     | `Promise<string \| null>`                       | 环境值，取不到为 `null`   |
-| `isChinaApp()`                                                                                 | `Promise<boolean>`                              | 是否国内 App              |
-| `getLocale()`                                                                                  | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
-| `getUser()`                                                                                    | `Promise<{ nickname, avatar, member, userId } \| null>` | 用户信息，取不到为 `null` |
-| `share()`                                                                                      | `Promise<boolean>`                              | 是否分享成功              |
-| `enableShare()`                                                                                | `Promise<void>`                                 | 无返回数据                |
-| `exit()` / `setTitle()` / `track()`                                                            | `void`                                          | 无返回值                  |
-| `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` | `void`                                          | 无返回值                  |
-| `showInterstitialAd()`                                                                         | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
+| 方法                                                                                                                | 返回值类型                                      | 说明                      |
+| :------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------- | :------------------------ |
+| `isAndroid()`                                                                                                       | `boolean`                                       | 是否安卓                  |
+| `isIos()`                                                                                                           | `boolean`                                       | 是否 iOS                  |
+| `inApp()`                                                                                                           | `boolean`                                       | 是否在 App 内             |
+| `getEnv()`                                                                                                          | `Promise<string \| null>`                       | 环境值，取不到为 `null`   |
+| `isChinaApp()`                                                                                                      | `Promise<boolean>`                              | 是否国内 App              |
+| `getLocale()`                                                                                                       | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
+| `getUser()`                                                                                                         | `Promise<{ nickname, avatar, member, userId } \| null>` | 用户信息，取不到为 `null` |
+| `share()`                                                                                                           | `Promise<boolean>`                              | 是否分享成功              |
+| `enableShare()`                                                                                                     | `Promise<void>`                                 | 无返回数据                |
+| `exit()` / `setTitle()` / `track()`                                                                                 | `void`                                          | 无返回值                  |
+| `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` /  `openMiniInApp()` | `void`                                          | 无返回值                  |
+| `showInterstitialAd()`                                                                                              | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
