@@ -71,7 +71,7 @@ if (!user) {
 | 环境判断   | `isChinaApp()`              | **异步** | 是否处于国内JAGAT APP                         |
 | 用户与身份 | `getLocale()`               | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
 | 用户与身份 | `getUser()`                 | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
-| App 交互   | `share(params)`             | **异步** | 调用JAGAT APP内的分享                         |
+| App 交互   | `share(params)`             | **异步** | 调用分享方法                                  |
 | App 交互   | `saveImageToAlbum(picData)` | **异步** | 调用保存图片到相册                            |
 | App 交互   | `setTitle(title)`           | 同步     | 设置网页标题                                  |
 | App 交互   | `track(params)`             | 同步     | 调用埋点方法                                  |
@@ -226,7 +226,7 @@ renderUser();
 
 ### `share(params): Promise<boolean>`
 
-调用JAGAT APP内的分享，唤起原生分享面板。分享成功返回 `true`；用户取消或失败返回 `false`。**异步。**。**app内可以直接调用生效**。
+调用分享方法，唤起浏览器分享或JAGAT APP内的分享或复制。分享成功返回 `true`；用户取消或失败返回 `false`。**异步。**。**app内或app外都可以直接调用生效**。
 
 ```typescript
 share: (params: {
@@ -291,7 +291,7 @@ jagat.setTitle('活动详情');
 
 ### `track(params): void`
 
-调用埋点方法 或 gtag埋点方法上报自定义事件（同步，无返回值）。**app内或app外都可以直接调用生效**。
+调用埋点方法上报自定义事件（同步，无返回值）。**app内或app外都可以直接调用生效**。
 
 ```typescript
 track: (params: { eventName: string; eventAttr: Record<string, any> }) => void
@@ -469,7 +469,7 @@ declare const jagat: {
   isChinaApp: () => Promise<boolean>;
   /** 退出 */
   exit: () => void;
-  /** 调用JAGAT APP内的分享 */
+  /** 调用分享 */
   share: (params: {
     /** 分享链接 */
     url: string;
