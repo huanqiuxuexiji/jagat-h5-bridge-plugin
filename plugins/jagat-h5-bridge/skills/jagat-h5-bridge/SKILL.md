@@ -17,7 +17,7 @@ description: 在 H5 网页中编写、修改或排查 jagat 全局桥接库（wi
 
 ### 1. 可以先判断环境，再调用部分 JAGAT App 专属能力
 
-`inApp()` 是JAGAT App 专属能力的前置判断依据，**必须**作为最外层守卫。`share`、`enableShare`、`setTitle`、`track`、`exit`、`openVipOrderPageInApp`、`openWebPageInApp`、`openMiniInApp` 的每个方法内已经为非 App 环境准备降级方案（通常是引导 `openJagatApp()` 或提示去应用商店）。
+`inApp()` 是JAGAT App 专属能力的前置判断依据，**必须**作为最外层守卫。`share`、`setTitle`、`track`、`exit`、`openVipOrderPageInApp`、`openWebPageInApp`、`openMiniInApp` 的每个方法内已经为非 App 环境准备降级方案（通常是引导 `openJagatApp()` 或提示去应用商店）。
 
 ```javascript
 jagat.openVipOrderPageInApp();
@@ -27,7 +27,7 @@ jagat.openVipOrderPageInApp();
 
 以下 7 个方法返回 `Promise`，**必须**用 `await` 或 `.then()` 取值：
 
-`getEnv()`、`isChinaApp()`、`getLocale()`、`getUser()`、`share()`、`enableShare()`
+`getEnv()`、`isChinaApp()`、`getLocale()`、`getUser()`、`share()`
 
 其余 10 个方法是同步的，直接读写返回值。**给异步方法加上 `await` 是最常被漏掉的一步**——漏掉后拿到的是 `Pending` 状态的 Promise 对象，而不是数据，且不会报错，极难排查。异步调用统一包裹 `try/catch`：
 
@@ -72,7 +72,6 @@ if (!user) {
 | 用户与身份 | `getLocale()`               | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
 | 用户与身份 | `getUser()`                 | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
 | App 交互   | `share(params)`             | **异步** | 调用JAGAT APP内的分享                         |
-| App 交互   | `enableShare(params)`       | **异步** | 开启JAGAT APP内的右上角头部分享                |
 | App 交互   | `setTitle(title)`           | 同步     | 设置JAGAT APP内的网页标题或浏览器网页标题      |
 | App 交互   | `track(params)`             | 同步     | 调用JAGAT APP内的埋点方法或gtag埋点方法        |
 | App 交互   | `exit()`                    | 同步     | 退出或关闭网页                                |
@@ -230,27 +229,21 @@ renderUser();
 
 ```typescript
 share: (params: {
-  businessId: number; // 用户id
-  shareType: string; // 分享类型
+  url: string; // 分享链接
   text: string; // 分享文本
-  picData: string; // 分享图
 }) => Promise<boolean>;
 ```
 
 | 参数         | 类型     | 必填 | 说明                                     |
 | :----------- | :------- | :--- | :--------------------------------------- |
-| `businessId` | `number` | 是   | 用户 id                                  |
-| `shareType`  | `string` | 是   | 分享类型，具体枚举由 App 端约定，默认 h5 |
+| `url`        | `number` | 是   | 分享链接                                 |
 | `text`       | `string` | 是   | 分享文本                                 |
-| `picData`    | `string` | 是   | 分享图 Base64 编码字符串                 |
 
 ```javascript
 async function onShareClick() {
   const ok = await jagat.share({
-    businessId: 10086,
-    shareType: 'h5',
+    url: 'https://example.jagat.cn/*****',
     text: '快来看看这个内容',
-    picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
   });
 
   if (ok) {
@@ -262,53 +255,6 @@ async function onShareClick() {
 ```
 
 > 必须由用户点击手势触发，**禁止**在页面加载时自动调用。
-
-### `enableShare(params): Promise<void>`
-
-开启 / 关闭 JAGAT APP内的右上角**常驻**的分享入口，无返回数据。**异步。**。**app内可以直接调用生效**。
-
-```typescript
-enableShare: (params: {
-  enable: boolean; // 是否开启
-  data: any; // 分享数据
-  text: string; // 分享文本
-  picData: string; // 分享图 Base64 编码字符串
-  businessType: number;
-  businessId: number;
-}) => Promise<void>;
-```
-
-| 参数           | 类型      | 必填 | 说明                        |
-| :------------- | :-------- | :--- | :-------------------------- |
-| `enable`       | `boolean` | 是   | `true` 开启，`false` 关闭   |
-| `data`         | `any`     | 是   | 分享数据，结构由 App 端约定 |
-| `text`         | `string`  | 是   | 分享文本                    |
-| `picData`      | `string`  | 是   | 分享图 Base64 编码字符串    |
-| `businessType` | `number`  | 是   | 业务类型，枚举由 App 端约定 |
-| `businessId`   | `number`  | 是   | 用户 id                     |
-
-```javascript
-await jagat.enableShare({
-  enable: true,
-  data: { url: location.href },
-  text: '分享给你',
-  picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
-  businessType: 1,
-  businessId: 10086,
-});
-
-// 离开页面时关闭，避免影响其他不需要分享的页面
-await jagat.enableShare({
-  enable: false,
-  data: {},
-  text: '',
-  picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
-  businessType: 1,
-  businessId: 10086,
-});
-```
-
-> **与 `share()` 的区别**：`share()` 是代码主动触发一次分享；`enableShare()` 是开启/关闭右上角常驻入口，由用户自己点击触发。
 
 ### `setTitle(title): void`
 
@@ -504,29 +450,13 @@ declare const jagat: {
   exit: () => void;
   /** 调用JAGAT APP内的分享 */
   share: (params: {
-    /** 用户id */
-    businessId: number;
-    /** 分享类型 */
-    shareType: string;
+    /** 分享链接 */
+    url: string;
     /** 分享文本 */
     text: string;
-    /** 分享图 */
-    picData: string;
   }) => Promise<boolean>;
   /** 设置JAGAT APP内的网页标题或浏览器网页标题 */
   setTitle: (title: string) => void;
-  /** 开启JAGAT APP内的右上角头部分享 */
-  enableShare: (params: {
-    enable: boolean;
-    /** 分享数据 */
-    data: any;
-    /** 分享文本 */
-    text: string;
-    /** 分享图 */
-    picData: string;
-    businessType: number;
-    businessId: number;
-  }) => Promise<void>;
   /** 调用JAGAT APP内的埋点方法或gtag埋点方法 */
   track: (params: { eventName: string; eventAttr: Record<string, any> }) => void;
   /** 获取JAGAT APP内的语言 zh-CN */
@@ -559,7 +489,7 @@ interface Window {
 | 现象                              | 根因                                         | 修复方式                                                                                                                           |
 | :-------------------------------- | :------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
 | `jagat is not defined`            | 脚本未加载，或在模块化环境中试图 `import` 它 | 确认 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 已在业务代码前加载；该库是全局挂载，不要用 `import` 引入 |
-| 拿到的是 `Promise` 对象而不是数据 | 对异步方法漏了 `await`                       | 给 `getEnv`/`isChinaApp`/`getLocale`/`getUser`/`share`/`enableShare` 补上 `await`                                                  |
+| 拿到的是 `Promise` 对象而不是数据 | 对异步方法漏了 `await`                       | 给 `getEnv`/`isChinaApp`/`getLocale`/`getUser`/`share` 补上 `await`                                                  |
 | `Cannot read properties of null`  | 未对 `null` 返回值判空                       | `getEnv`、`getUser` 返回值使用前先判断                                                                                             |
 | 调用后毫无反应、控制台也无报错    | 当前不在 App 内，桥接层未注入                | 先用 `inApp()` 判断，非 App 环境走降级分支                                                                                         |
 | 分享面板不弹、App 唤不起来        | 在非用户手势的时机调用                       | 把调用移入 `click` 等用户手势回调                                                                                                  |
@@ -586,7 +516,6 @@ interface Window {
 | `getLocale()`                                                                                                       | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
 | `getUser()`                                                                                                         | `Promise<{ nickname, avatar, member, userId } \| null>` | 用户信息，取不到为 `null` |
 | `share()`                                                                                                           | `Promise<boolean>`                              | 是否分享成功              |
-| `enableShare()`                                                                                                     | `Promise<void>`                                 | 无返回数据                |
 | `exit()` / `setTitle()` / `track()`                                                                                 | `void`                                          | 无返回值                  |
 | `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` /  `openMiniInApp()` | `void`                                          | 无返回值                  |
 | `showInterstitialAd()`                                                                                              | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
