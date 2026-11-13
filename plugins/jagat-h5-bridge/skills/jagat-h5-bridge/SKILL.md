@@ -72,7 +72,7 @@ if (!user) {
 | 用户与身份 | `getLocale()`               | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
 | 用户与身份 | `getUser()`                 | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
 | App 交互   | `share(params)`             | **异步** | 调用JAGAT APP内的分享                         |
-| App 交互   | `saveImageToAlbum(params)`  | **异步** | 调用保存图片到相册                            |
+| App 交互   | `saveImageToAlbum(picData)` | **异步** | 调用保存图片到相册                            |
 | App 交互   | `setTitle(title)`           | 同步     | 设置网页标题                                  |
 | App 交互   | `track(params)`             | 同步     | 调用埋点方法                                  |
 | App 交互   | `exit()`                    | 同步     | 退出或关闭网页                                |
@@ -230,8 +230,10 @@ renderUser();
 
 ```typescript
 share: (params: {
-  url: string; // 分享链接
-  text: string; // 分享文本
+  /** 分享链接 */
+  url: string;
+  /** 分享文本 */
+  text: string;
 }) => Promise<boolean>;
 ```
 
@@ -255,27 +257,19 @@ async function onShareClick() {
 }
 ```
 
-### `saveImageToAlbum(params): Promise<{isSuccess: boolean}>`
+### `saveImageToAlbum(picData): Promise<boolean>`
 
-调用保存图片到相册。保存成功返回`{isSuccess: true}`；失败返回 `{isSuccess: false}`。**异步。**。**app内或app外都可以直接调用生效**。
-
-```typescript
-saveImageToAlbum: (params: {
-  picData: string; // 需要保存的图片 Base64 编码字符串
-}) => Promise<{isSuccess: boolean}>;
-```
+调用保存图片到相册。保存成功返回`true`；失败返回 `false`。**异步。**。**app内或app外都可以直接调用生效**。
 
 | 参数         | 类型     | 必填 | 说明                                     |
 | :----------- | :------- | :--- | :--------------------------------------- |
-| `picData`    | `string` | 是   | 保存图片 Base64 编码字符串                 |
+| `picData`    | `string` | 是   | 保存图片的纯Base64编码字符串              |
 
 ```javascript
 async function saveImage() {
-  const res = await jagat.saveImageToAlbum({
-    picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
-  });
+  const ok = await jagat.saveImageToAlbum('iVBORw0KGgoAAAANSUhEUgAA...');
 
-  if (res.isSuccess) {
+  if (ok) {
     console.log('保存成功');
   } else {
     console.log('保存失败');
@@ -483,10 +477,7 @@ declare const jagat: {
     text: string;
   }) => Promise<boolean>;
   /** 调用保存图片到相册 */
-  saveImageToAlbum: (params: {
-    /** 需要保存的图片 Base64 编码字符串 */
-    picData: string;
-  }) => Promise<{isSuccess: boolean}>;
+  saveImageToAlbum: (picData: string) => Promise<boolean>;
   /** 设置网页标题 */
   setTitle: (title: string) => void;
   /** 调用埋点方法 */
@@ -545,7 +536,7 @@ interface Window {
 | `getLocale()`                                                                                                       | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
 | `getUser()`                                                                                                         | `Promise<{ nickname, avatar, member, userId } \| null>` | 用户信息，取不到为 `null` |
 | `share()`                                                                                                           | `Promise<boolean>`                              | 是否分享成功              |
-| `saveImageToAlbum()`                                                                                                | `Promise<{isSuccess: boolean}>`                 | 是否保存成功              |
+| `saveImageToAlbum()`                                                                                                | `Promise<boolean>`                              | 是否保存成功              |
 | `exit()` / `setTitle()` / `track()`                                                                                 | `void`                                          | 无返回值                  |
 | `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` /  `openMiniInApp()` | `void`                                          | 无返回值                  |
 | `showInterstitialAd()`                                                                                              | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
