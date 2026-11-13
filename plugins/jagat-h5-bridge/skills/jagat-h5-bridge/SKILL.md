@@ -72,8 +72,9 @@ if (!user) {
 | 用户与身份 | `getLocale()`               | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
 | 用户与身份 | `getUser()`                 | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
 | App 交互   | `share(params)`             | **异步** | 调用JAGAT APP内的分享                         |
-| App 交互   | `setTitle(title)`           | 同步     | 设置JAGAT APP内的网页标题或浏览器网页标题      |
-| App 交互   | `track(params)`             | 同步     | 调用JAGAT APP内的埋点方法或gtag埋点方法        |
+| App 交互   | `saveImageToAlbum(params)`  | **异步** | 调用保存图片到相册                            |
+| App 交互   | `setTitle(title)`           | 同步     | 设置网页标题                                  |
+| App 交互   | `track(params)`             | 同步     | 调用埋点方法                                  |
 | App 交互   | `exit()`                    | 同步     | 退出或关闭网页                                |
 | 页面跳转   | `openWebPageInApp(url)`     | 同步     | 唤醒JAGAT APP，并在JAGAT APP内的内打开网页     |
 | 页面跳转   | `openJagatApp()`            | 同步     | 唤醒 JAGAT APP                                |
@@ -254,11 +255,37 @@ async function onShareClick() {
 }
 ```
 
-> 必须由用户点击手势触发，**禁止**在页面加载时自动调用。
+### `saveImageToAlbum(params): Promise<{isSuccess: boolean}>`
+
+调用保存图片到相册。保存成功返回`{isSuccess: true}`；失败返回 `{isSuccess: false}`。**异步。**。**app内或app外都可以直接调用生效**。
+
+```typescript
+saveImageToAlbum: (params: {
+  picData: string; // 需要保存的图片 Base64 编码字符串
+}) => Promise<{isSuccess: boolean}>;
+```
+
+| 参数         | 类型     | 必填 | 说明                                     |
+| :----------- | :------- | :--- | :--------------------------------------- |
+| `picData`    | `string` | 是   | 保存图片 Base64 编码字符串                 |
+
+```javascript
+async function saveImage() {
+  const res = await jagat.saveImageToAlbum({
+    picData: 'iVBORw0KGgoAAAANSUhEUgAA...',
+  });
+
+  if (res.isSuccess) {
+    console.log('保存成功');
+  } else {
+    console.log('保存失败');
+  }
+}
+```
 
 ### `setTitle(title): void`
 
-设置JAGAT APP内的网页标题或浏览器网页标题（同步）。普通浏览器中标题由页面自身 `<title>` 决定。**app内或app外都可以直接调用生效**。
+设置网页标题（同步）。普通浏览器中标题由页面自身 `<title>` 决定。**app内或app外都可以直接调用生效**。
 
 | 参数    | 类型     | 必填 | 说明             |
 | :------ | :------- | :--- | :--------------- |
@@ -270,7 +297,7 @@ jagat.setTitle('活动详情');
 
 ### `track(params): void`
 
-调用JAGAT APP内的埋点方法 或 gtag埋点方法上报自定义事件（同步，无返回值）。**app内或app外都可以直接调用生效**。
+调用埋点方法 或 gtag埋点方法上报自定义事件（同步，无返回值）。**app内或app外都可以直接调用生效**。
 
 ```typescript
 track: (params: { eventName: string; eventAttr: Record<string, any> }) => void
@@ -455,9 +482,14 @@ declare const jagat: {
     /** 分享文本 */
     text: string;
   }) => Promise<boolean>;
-  /** 设置JAGAT APP内的网页标题或浏览器网页标题 */
+  /** 调用保存图片到相册 */
+  saveImageToAlbum: (params: {
+    /** 需要保存的图片 Base64 编码字符串 */
+    picData: string;
+  }) => Promise<{isSuccess: boolean}>;
+  /** 设置网页标题 */
   setTitle: (title: string) => void;
-  /** 调用JAGAT APP内的埋点方法或gtag埋点方法 */
+  /** 调用埋点方法 */
   track: (params: { eventName: string; eventAttr: Record<string, any> }) => void;
   /** 获取JAGAT APP内的语言 zh-CN */
   getLocale: () => Promise<string>;
@@ -491,9 +523,6 @@ interface Window {
 | `jagat is not defined`            | 脚本未加载，或在模块化环境中试图 `import` 它 | 确认 `<script src="https://www.jagat.io/registry/jagat_sdk.js"></script>` 已在业务代码前加载；该库是全局挂载，不要用 `import` 引入 |
 | 拿到的是 `Promise` 对象而不是数据 | 对异步方法漏了 `await`                       | 给 `getEnv`/`isChinaApp`/`getLocale`/`getUser`/`share` 补上 `await`                                                  |
 | `Cannot read properties of null`  | 未对 `null` 返回值判空                       | `getEnv`、`getUser` 返回值使用前先判断                                                                                             |
-| 调用后毫无反应、控制台也无报错    | 当前不在 App 内，桥接层未注入                | 先用 `inApp()` 判断，非 App 环境走降级分支                                                                                         |
-| 分享面板不弹、App 唤不起来        | 在非用户手势的时机调用                       | 把调用移入 `click` 等用户手势回调                                                                                                  |
-| `setTitle` 设置后页面标题没变     | 当前不在 App 内                              | 该能力仅 App 内生效，普通浏览器需改 `<title>`                                                                                      |
 | 埋点数据在 App 端缺失             | `eventAttr` 传了嵌套对象                     | 拆平为一层基础类型键值对                                                                                                           |
 | 环境判断逻辑失效                  | 硬编码了小写或变体字符串                     | 只使用 `'TEST'` / `'BETA'` / `'PROD'` 三个大写枚举值                                                                               |
 
@@ -516,6 +545,7 @@ interface Window {
 | `getLocale()`                                                                                                       | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
 | `getUser()`                                                                                                         | `Promise<{ nickname, avatar, member, userId } \| null>` | 用户信息，取不到为 `null` |
 | `share()`                                                                                                           | `Promise<boolean>`                              | 是否分享成功              |
+| `saveImageToAlbum()`                                                                                                | `Promise<{isSuccess: boolean}>`                 | 是否保存成功              |
 | `exit()` / `setTitle()` / `track()`                                                                                 | `void`                                          | 无返回值                  |
 | `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` /  `openMiniInApp()` | `void`                                          | 无返回值                  |
 | `showInterstitialAd()`                                                                                              | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
