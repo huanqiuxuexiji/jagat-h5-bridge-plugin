@@ -259,7 +259,7 @@ async function onShareClick() {
 
 ### `saveImageToAlbum(picData): Promise<boolean>`
 
-调用保存图片到相册。仅支持png格式；保存成功返回`true`；失败返回 `false`。**异步。**。**app内或app外都可以直接调用生效**。
+调用保存图片到相册。仅支持png的base64编码格式；保存成功返回`true`；失败返回 `false`。**异步。**。**app内或app外都可以直接调用生效**。
 
 | 参数         | 类型     | 必填 | 说明                                     |
 | :----------- | :------- | :--- | :--------------------------------------- |
