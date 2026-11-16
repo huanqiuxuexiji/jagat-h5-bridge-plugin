@@ -412,24 +412,28 @@ document.getElementById('show-ad-btn').addEventListener('click', () => {
 });
 ```
 
-### `createTencentBannerAd(): Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>`
+### `createTencentBannerAd(containerId): Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>`
 
-创建腾讯Banner广告（异步，无参数）。**app内或app外都可以直接调用生效**。
+创建腾讯Banner广告（异步）。**app内或app外都可以直接调用生效**。
+
+| 参数  | 类型     | 必填 | 说明                         |
+| :---- | :------- | :--- | :--------------------------- |
+| `containerId` | `string` | 是   | 需要显示Banner广告的元素id   |
 
 ```javascript
-document.getElementById('show-ad-btn').addEventListener('click', () => {
-  jagat.createTencentBannerAd();
-});
+jagat.createTencentBannerAd('ad_banner');
 ```
 
-### `destroyTencentBannerAd(): Promise<void>`
+### `destroyTencentBannerAd(containerId): Promise<void>`
 
-销毁腾讯Banner广告（异步，无参数）。**app内或app外都可以直接调用生效**。
+销毁腾讯Banner广告（异步）。**app内或app外都可以直接调用生效**。
+
+| 参数  | 类型     | 必填 | 说明                         |
+| :---- | :------- | :--- | :--------------------------- |
+| `containerId` | `string` | 是   | 需要销毁已显示的Banner广告的元素id   |
 
 ```javascript
-document.getElementById('show-ad-btn').addEventListener('click', () => {
-  jagat.destroyTencentBannerAd();
-});
+jagat.destroyTencentBannerAd('ad_banner');
 ```
 
 ---
