@@ -64,24 +64,26 @@ if (!user) {
 
 | 分类       | 方法                        | 调用方式 | 功能摘要                        |
 | :--------- | :-------------------------- | :------- | :------------------------------ |
-| 环境判断   | `isAndroid()`               | 同步     | 是否是安卓                      |
-| 环境判断   | `isIos()`                   | 同步     | 是否是 iOS                                    |
-| 环境判断   | `inApp()`                   | 同步     | 是否处于JAGAT APP内                           |
-| 环境判断   | `getEnv()`                  | **异步** | 获取当前环境值                                |
-| 环境判断   | `isChinaApp()`              | **异步** | 是否处于国内JAGAT APP                         |
-| 用户与身份 | `getLocale()`               | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
-| 用户与身份 | `getUser()`                 | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员member）  |
-| App 交互   | `share(params)`             | **异步** | 调用分享方法                                  |
-| App 交互   | `saveImageToAlbum(picData)` | **异步** | 调用保存图片到相册                            |
-| App 交互   | `setTitle(title)`           | 同步     | 设置网页标题                                  |
-| App 交互   | `track(params)`             | 同步     | 调用埋点方法                                  |
-| App 交互   | `exit()`                    | 同步     | 退出或关闭网页                                |
-| 页面跳转   | `openWebPageInApp(url)`     | 同步     | 唤醒JAGAT APP，并在JAGAT APP内的内打开网页     |
-| 页面跳转   | `openJagatApp()`            | 同步     | 唤醒 JAGAT APP                                |
-| 页面跳转   | `openWebPageInBrowser(url)` | 同步     | 在JAGAT APP内使用手机浏览器打开网页            |
-| 页面跳转   | `openVipOrderPageInApp()`   | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的Vip订阅页      |
-| 页面跳转   | `openMiniInApp()`           | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的小程序         |
-| 页面跳转   | `showInterstitialAd()`      | **异步** | 显示1次腾讯插屏广告                            |
+| 环境判断   | `isAndroid()`                             | 同步     | 是否是安卓                      |
+| 环境判断   | `isIos()`                                 | 同步     | 是否是 iOS                                    |
+| 环境判断   | `inApp()`                                 | 同步     | 是否处于JAGAT APP内                           |
+| 环境判断   | `getEnv()`                                | **异步** | 获取当前环境值                                |
+| 环境判断   | `isChinaApp()`                            | **异步** | 是否处于国内JAGAT APP                         |
+| 用户与身份 | `getLocale()`                             | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
+| 用户与身份 | `getUser()`                               | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员vip）  |
+| App 交互   | `share(params)`                           | **异步** | 调用分享方法                                  |
+| App 交互   | `saveImageToAlbum(picData)`               | **异步** | 调用保存图片到相册                            |
+| App 交互   | `setTitle(title)`                         | 同步     | 设置网页标题                                  |
+| App 交互   | `track(params)`                           | 同步     | 调用埋点方法                                  |
+| App 交互   | `exit()`                                  | 同步     | 退出或关闭网页                                |
+| 页面跳转   | `openWebPageInApp(url)`                   | 同步     | 唤醒JAGAT APP，并在JAGAT APP内的内打开网页     |
+| 页面跳转   | `openJagatApp()`                          | 同步     | 唤醒 JAGAT APP                                |
+| 页面跳转   | `openWebPageInBrowser(url)`               | 同步     | 在JAGAT APP内使用手机浏览器打开网页            |
+| 页面跳转   | `openVipOrderPageInApp()`                 | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的Vip订阅页      |
+| 页面跳转   | `openMiniInApp()`                         | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的小程序         |
+| 页面跳转   | `showTencentInterstitialAd()`             | **异步** | 显示1次腾讯插屏广告                            |
+| 页面跳转   | `createTencentBannerAd(containerId)`      | **异步** | 创建腾讯Banner广告                             |
+| 页面跳转   | `destroyTencentBannerAd(containerId)`     | **异步** | 销毁腾讯Banner广告                             |
 
 ---
 
@@ -193,7 +195,7 @@ async function applyLocale() {
 applyLocale();
 ```
 
-### `getUser(): Promise<{ nickname: string; avatar: string; userId: number; member: boolean } | null>`
+### `getUser(): Promise<{ nickname: string; avatar: string; userId: number; vip: boolean; countryCode: string; } | null>`
 
 获取JAGAT APP内的当前用户信息。未登录或不在app内或取不到时返回 `null`。**异步。**。**app内或app外都可以直接调用生效**。
 
@@ -201,10 +203,11 @@ applyLocale();
 
 | 字段       | 类型     | 说明         |
 | :--------- | :------- | :----------- |
-| `nickname` | `string` | 用户昵称     |
-| `avatar`   | `string` | 用户头像地址 |
-| `userId`   | `number` | 用户 id      |
-| `member`   | `boolean` | 是否是会员  |
+| `nickname`         | `string`  | 用户昵称     |
+| `avatar`           | `string`  | 用户头像地址 |
+| `userId`           | `number`  | 用户 id      |
+| `vip`              | `boolean` | 是否是会员  |
+| `countryCode`      | `string`  | 国家代码 例如`HK` |
 
 ```javascript
 async function renderUser() {
@@ -399,13 +402,33 @@ document.getElementById('mini-btn').addEventListener('click', () => {
 });
 ```
 
-### `showInterstitialAd(): Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>`
+### `showTencentInterstitialAd(): Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>`
 
 显示1次腾讯插屏广告（异步，无参数）。**app内或app外都可以直接调用生效**。
 
 ```javascript
 document.getElementById('show-ad-btn').addEventListener('click', () => {
-  jagat.showInterstitialAd();
+  jagat.showTencentInterstitialAd();
+});
+```
+
+### `createTencentBannerAd(): Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>`
+
+创建腾讯Banner广告（异步，无参数）。**app内或app外都可以直接调用生效**。
+
+```javascript
+document.getElementById('show-ad-btn').addEventListener('click', () => {
+  jagat.createTencentBannerAd();
+});
+```
+
+### `destroyTencentBannerAd(): Promise<void>`
+
+销毁腾讯Banner广告（异步，无参数）。**app内或app外都可以直接调用生效**。
+
+```javascript
+document.getElementById('show-ad-btn').addEventListener('click', () => {
+  jagat.destroyTencentBannerAd();
 });
 ```
 
@@ -485,7 +508,7 @@ declare const jagat: {
   /** 获取JAGAT APP内的语言 zh-CN */
   getLocale: () => Promise<string>;
   /** 获取JAGAT APP内的当前用户信息 */
-  getUser: () => Promise<{ nickname: string; avatar: string; userId: number; member: boolean; } | null>;
+  getUser: () => Promise<{ nickname: string; avatar: string; userId: number; vip: boolean; countryCode: string; } | null>;
   /** 唤醒JAGAT APP，并在JAGAT APP内的内打开网页 */
   openWebPageInApp: (url: string) => void;
   /** 唤醒JAGAT APP */
@@ -497,7 +520,11 @@ declare const jagat: {
   /** 唤醒JAGAT APP，打开JAGAT APP内的小程序 */
   openMiniInApp: (params: { appletId: string; path: string; query: Record<string, any> }) => void;
   /** 显示1次腾讯插屏广告 */
-  showInterstitialAd: () => Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>;
+  showTencentInterstitialAd: () => Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>;
+  /** 创建腾讯插屏广告 */
+  createTencentBannerAd: () => Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>;
+  /** 销毁腾讯插屏广告 */
+  destroyTencentBannerAd: () => Promise<void>;
 };
 
 interface Window {
@@ -528,15 +555,17 @@ interface Window {
 
 | 方法                                                                                                                | 返回值类型                                      | 说明                      |
 | :------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------- | :------------------------ |
-| `isAndroid()`                                                                                                       | `boolean`                                       | 是否安卓                  |
-| `isIos()`                                                                                                           | `boolean`                                       | 是否 iOS                  |
-| `inApp()`                                                                                                           | `boolean`                                       | 是否在 App 内             |
-| `getEnv()`                                                                                                          | `Promise<string \| null>`                       | 环境值，取不到为 `null`   |
-| `isChinaApp()`                                                                                                      | `Promise<boolean>`                              | 是否国内 App              |
-| `getLocale()`                                                                                                       | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
-| `getUser()`                                                                                                         | `Promise<{ nickname, avatar, member, userId } \| null>` | 用户信息，取不到为 `null` |
-| `share()`                                                                                                           | `Promise<boolean>`                              | 是否分享成功              |
-| `saveImageToAlbum()`                                                                                                | `Promise<boolean>`                              | 是否保存成功              |
-| `exit()` / `setTitle()` / `track()`                                                                                 | `void`                                          | 无返回值                  |
-| `openWebPageInApp()` / `openJagatApp()` / `openWebPageInBrowser()` / `openVipOrderPageInApp()` /  `openMiniInApp()` | `void`                                          | 无返回值                  |
-| `showInterstitialAd()`                                                                                              | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
+| `isAndroid`                                                                                                       | `boolean`                                       | 是否安卓                  |
+| `isIos`                                                                                                           | `boolean`                                       | 是否 iOS                  |
+| `inApp`                                                                                                           | `boolean`                                       | 是否在 App 内             |
+| `getEnv`                                                                                                          | `Promise<string \| null>`                       | 环境值，取不到为 `null`   |
+| `isChinaApp`                                                                                                      | `Promise<boolean>`                              | 是否国内 App              |
+| `getLocale`                                                                                                       | `Promise<string>`                               | 语言标识，如 `zh-CN`      |
+| `getUser`                                                                                                         | `Promise<{ nickname, avatar, vip, countryCode, userId } \| null>` | 用户信息，取不到为 `null` |
+| `share`                                                                                                           | `Promise<boolean>`                              | 是否分享成功              |
+| `saveImageToAlbum`                                                                                                | `Promise<boolean>`                              | 是否保存成功              |
+| `exit` / `setTitle` / `track`                                                                                     | `void`                                          | 无返回值                  |
+| `openWebPageInApp` / `openJagatApp` / `openWebPageInBrowser` / `openVipOrderPageInApp` /  `openMiniInApp`         | `void`                                          | 无返回值                  |
+| `showTencentInterstitialAd`                                                                                       | `Promise<{ reason: 'closed' \| 'already_showing' \| 'sdk_not_ready' \| 'render_error' \| 'not_preloaded'; message: string;}>`  | 返回广告显示状态信息     |
+| `createTencentBannerAd`                                                                                           | `Promise<{ reason: 'not_support' \| 'not_containerId' \| 'already_created' \| 'creation_failed'; message: string;}>`  | 返回广告显示状态信息     |
+| `destroyTencentBannerAd`                                                                                          | `Promise<void>`  | 返回广告显示状态信息     |
