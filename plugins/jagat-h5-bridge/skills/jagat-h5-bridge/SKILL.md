@@ -64,26 +64,26 @@ if (!user) {
 
 | 分类       | 方法                        | 调用方式 | 功能摘要                        |
 | :--------- | :-------------------------- | :------- | :------------------------------ |
-| 环境判断   | `isAndroid()`                             | 同步     | 是否是安卓                      |
-| 环境判断   | `isIos()`                                 | 同步     | 是否是 iOS                                    |
-| 环境判断   | `inApp()`                                 | 同步     | 是否处于JAGAT APP内                           |
-| 环境判断   | `getEnv()`                                | **异步** | 获取当前环境值                                |
-| 环境判断   | `isChinaApp()`                            | **异步** | 是否处于国内JAGAT APP                         |
-| 用户与身份 | `getLocale()`                             | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
-| 用户与身份 | `getUser()`                               | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员vip）  |
-| App 交互   | `share(params)`                           | **异步** | 调用分享方法                                  |
-| App 交互   | `saveImageToAlbum(picData)`               | **异步** | 调用保存图片到相册                            |
-| App 交互   | `setTitle(title)`                         | 同步     | 设置网页标题                                  |
-| App 交互   | `track(params)`                           | 同步     | 调用埋点方法                                  |
-| App 交互   | `exit()`                                  | 同步     | 退出或关闭网页                                |
-| 页面跳转   | `openWebPageInApp(url)`                   | 同步     | 唤醒JAGAT APP，并在JAGAT APP内的内打开网页     |
-| 页面跳转   | `openJagatApp()`                          | 同步     | 唤醒 JAGAT APP                                |
-| 页面跳转   | `openWebPageInBrowser(url)`               | 同步     | 在JAGAT APP内使用手机浏览器打开网页            |
-| 页面跳转   | `openVipOrderPageInApp()`                 | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的Vip订阅页      |
-| 页面跳转   | `openMiniInApp()`                         | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的小程序         |
-| 页面跳转   | `showTencentInterstitialAd()`             | **异步** | 显示1次腾讯插屏广告                            |
-| 页面跳转   | `createTencentBannerAd(containerId)`      | **异步** | 创建腾讯Banner广告                             |
-| 页面跳转   | `destroyTencentBannerAd(containerId)`     | **异步** | 销毁腾讯Banner广告                             |
+| 环境判断   | `isAndroid()`                                        | 同步     | 是否是安卓                      |
+| 环境判断   | `isIos()`                                            | 同步     | 是否是 iOS                                    |
+| 环境判断   | `inApp()`                                            | 同步     | 是否处于JAGAT APP内                           |
+| 环境判断   | `getEnv()`                                           | **异步** | 获取当前环境值                                |
+| 环境判断   | `isChinaApp()`                                       | **异步** | 是否处于国内JAGAT APP                         |
+| 用户与身份 | `getLocale()`                                        | **异步** | 获取JAGAT APP内的语言，如 `zh-CN`              |
+| 用户与身份 | `getUser()`                                          | **异步** | 获取JAGAT APP内的当前用户信息（昵称nickname、头像avatar、是否是会员vip）  |
+| App 交互   | `share(params)`                                      | **异步** | 调用分享方法                                  |
+| App 交互   | `saveImageToAlbum(picData)`                          | **异步** | 调用保存图片到相册                            |
+| App 交互   | `setTitle(title)`                                    | 同步     | 设置网页标题                                  |
+| App 交互   | `track(params)`                                      | 同步     | 调用埋点方法                                  |
+| App 交互   | `exit()`                                             | 同步     | 退出或关闭网页                                |
+| 页面跳转   | `openWebPageInApp(url)`                              | 同步     | 唤醒JAGAT APP，并在JAGAT APP内的内打开网页     |
+| 页面跳转   | `openJagatApp()`                                     | 同步     | 唤醒 JAGAT APP                                |
+| 页面跳转   | `openWebPageInBrowser(url)`                          | 同步     | 在JAGAT APP内使用手机浏览器打开网页            |
+| 页面跳转   | `openVipOrderPageInApp()`                            | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的Vip订阅页      |
+| 页面跳转   | `openMiniInApp()`                                    | 同步     | 唤醒JAGAT APP，打开JAGAT APP内的小程序         |
+| 页面跳转   | `showTencentInterstitialAd()`                        | **异步** | 显示1次腾讯插屏广告                            |
+| 页面跳转   | `createTencentBannerAd(containerId, carousel)`       | **异步** | 创建腾讯Banner广告                             |
+| 页面跳转   | `destroyTencentBannerAd(containerId)`                | **异步** | 销毁腾讯Banner广告                             |
 
 ---
 
@@ -412,13 +412,14 @@ document.getElementById('show-ad-btn').addEventListener('click', () => {
 });
 ```
 
-### `createTencentBannerAd(containerId): Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>`
+### `createTencentBannerAd(containerId, carousel?): Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>`
 
 创建腾讯Banner广告（异步）。**app内或app外都可以直接调用生效**。
 
-| 参数  | 类型     | 必填 | 说明                         |
-| :---- | :------- | :--- | :--------------------------- |
-| `containerId` | `string` | 是   | 需要显示Banner广告的元素id   |
+| 参数          | 类型     | 必填 | 说明                          |
+| :------------ | :------- | :--- | :--------------------------- |
+| `containerId` | `string` | 是   | 需要显示Banner广告的元素id    |
+| `carousel`    | `number` | 否   | Banner广告的轮播时间间隔，可选，默认10000ms（10s）    |
 
 ```javascript
 jagat.createTencentBannerAd('ad_banner');
@@ -526,7 +527,7 @@ declare const jagat: {
   /** 显示1次腾讯插屏广告 */
   showTencentInterstitialAd: () => Promise<{ reason: 'closed' | 'already_showing' | 'sdk_not_ready' | 'render_error' | 'not_preloaded'; message: string;}>;
   /** 创建腾讯插屏广告 */
-  createTencentBannerAd: () => Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>;
+  createTencentBannerAd: (containerId: string, carousel?: number) => Promise<{ reason: 'not_support' | 'not_containerId' | 'already_created' | 'creation_failed'; message: string;}>;
   /** 销毁腾讯插屏广告 */
   destroyTencentBannerAd: () => Promise<void>;
 };
